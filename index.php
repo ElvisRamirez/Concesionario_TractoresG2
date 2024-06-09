@@ -1,3 +1,30 @@
+<?php
+$dbHost = 'localhost';
+$dbName = 'Concesionario_Tractores';
+$dbUser = 'postgres';
+$dbPass = '593';
+
+try {
+    $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
+    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Consulta SQL para obtener los últimos tractores disponibles
+    $sql = "SELECT t.Imagen, mt.Marca, mt.Modelo, t.Año, t.Estado, mt.Descripción AS DescripciónTractor
+            FROM Tractores t
+            INNER JOIN ModelosTractores mt ON t.ModeloID = mt.ModeloID
+            WHERE t.Estado = 'disponible'
+            ORDER BY t.TractorID DESC
+            LIMIT 3"; // Obtener los últimos 3 tractores disponibles
+
+    $stmt = $db->query($sql);
+    $tractores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+    die("Error al conectar a la base de datos: " . $e->getMessage());
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -75,37 +102,26 @@
 
 
   <div class="mt-5 row-with-transition">
-  <h2 class="mb-4">Últimos Productos</h2>
+  <h2 class="mb-4">Últimos Tractores Disponibles</h2>
   <div class="row">
+    <?php foreach ($tractores as $tractor) { ?>
     <div class="col-md-4 mb-4">
       <div class="card h-100 border-0 shadow">
-        <img class="card-img-top rounded" src="tractor1.jpg" alt="Tractor 1">
+        <?php if (isset($tractor['imagen'])) { ?>
+          <img class="card-img-top rounded" src="data:image/jpeg;base64,<?php echo base64_encode(stream_get_contents($tractor['imagen'])); ?>" alt="<?php echo isset($tractor['marca']) && isset($tractor['modelo']) ? $tractor['marca'] . ' ' . $tractor['modelo'] : ''; ?>">
+        <?php } ?>
         <div class="card-body">
-          <h5 class="card-title">Tractor Modelo A</h5>
-          <p class="card-text">Descripción del tractor modelo A.</p>
+          <h5 class="card-title"><?php echo isset($tractor['marca']) && isset($tractor['modelo']) ? $tractor['marca'] . ' ' . $tractor['modelo'] : ''; ?></h5>
+          <p class="card-text"><strong>Año:</strong> <?php echo isset($tractor['año']) ? $tractor['año'] : ''; ?></p>
+          <p class="card-text"><strong>Estado:</strong> <?php echo isset($tractor['estado']) ? $tractor['estado'] : ''; ?></p>
+          <p class="card-text"><?php echo isset($tractor['descripcióntractor']) ? $tractor['descripcióntractor'] : ''; ?></p>
         </div>
       </div>
     </div>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 border-0 shadow">
-        <img class="card-img-top rounded" src="tractor2.jpg" alt="Tractor 2">
-        <div class="card-body">
-          <h5 class="card-title">Tractor Modelo B</h5>
-          <p class="card-text">Descripción del tractor modelo B.</p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-4 mb-4">
-      <div class="card h-100 border-0 shadow">
-        <img class="card-img-top rounded" src="tractor3.jpg" alt="Tractor 3">
-        <div class="card-body">
-          <h5 class="card-title">Tractor Modelo C</h5>
-          <p class="card-text">Descripción del tractor modelo C.</p>
-        </div>
-      </div>
-    </div>
+    <?php } ?>
   </div>
 </div>
+
 
   <div class="mt-5">
     <h2 class="mb-4">Servicios</h2>
