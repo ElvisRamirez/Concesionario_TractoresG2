@@ -80,7 +80,7 @@ try {
 <div class="sidenav" id="mySidenav">
         <a href="index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
         <a href="Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
-        <a href="/Concesionario_Tractores/Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
+        <a href="Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
         <a href="proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
         <a href="tractores.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
         <a href="ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>

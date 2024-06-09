@@ -60,60 +60,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form method="post">
         <div class="form-group">
             <label for="nombre">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo $proveedor['Nombre']; ?>" required>
+            <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo isset($proveedor['nombre']) ? $proveedor['nombre'] : ''; ?>" required>
         </div>
         <div class="form-group">
             <label for="direccion">Dirección:</label>
-            <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $proveedor['Dirección']; ?>">
+            <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo isset($proveedor['dirección']) ? $proveedor['dirección'] : ''; ?>">
         </div>
         <div class="form-group">
             <label for="telefono">Teléfono:</label>
-            <input type="text" class="form-control" id="telefono" name="telefono" value="<?php echo $proveedor['Teléfono']; ?>" required>
+            <input type="text" class="form-control" id="telefono" name="telefono" value="<?php echo isset($proveedor['teléfono']) ? $proveedor['teléfono'] : ''; ?>" required>
         </div>
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" value="<?php echo $proveedor['Email']; ?>" required>
-        </div>
-        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-    </form>
-</div>
-
-<!-- Scripts de Bootstrap -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-</html>
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Editar Proveedor</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</head>
-<body>
-
-<div class="container mt-5">
-    <h2>Editar Proveedor</h2>
-    <form method="post">
-        <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo $proveedor['Nombre']; ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="direccion">Dirección:</label>
-            <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $proveedor['Dirección']; ?>">
-        </div>
-        <div class="form-group">
-            <label for="telefono">Teléfono:</label>
-            <input type="text" class="form-control" id="telefono" name="telefono" value="<?php echo $proveedor['Teléfono']; ?>" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" value="<?php echo $proveedor['Email']; ?>" required>
+            <input type="email" class="form-control" id="email" name="email" value="<?php echo isset($proveedor['email']) ? $proveedor['email'] : ''; ?>" required>
         </div>
         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
     </form>
