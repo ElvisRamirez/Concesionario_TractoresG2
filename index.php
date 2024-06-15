@@ -4,10 +4,6 @@ $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
 
-
-
-
-
 try {
     $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -87,7 +83,7 @@ try {
         <a href="Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
         <a href="Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
         <a href="tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
-        <a href="ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
+        <a href="Form_Ventas/ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
         <a href="alquileres.php"><i class="fas fa-calendar-alt mr-2"></i> Alquileres</a>
         <a href="mantenimientos.php"><i class="fas fa-tools mr-2"></i> Mantenimiento</a>
         <a href="facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>

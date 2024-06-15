@@ -20,6 +20,7 @@ function obtenerClientes($db) {
 // Función para generar enlace de edición
 function generarEnlaceEditar($clienteID) {
     return "<a href='editar_cliente.php?id=$clienteID'><i class='fas fa-edit'></i> Editar</a>";
+    
 }
 
 // Función para generar enlace de eliminación
@@ -35,6 +36,7 @@ function mostrarClientes($clientes) {
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
+                      <th>Cédula</th>
                     <th>Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
@@ -48,6 +50,7 @@ function mostrarClientes($clientes) {
                 <td>{$cliente['clienteid']}</td>
                 <td>{$cliente['nombre']}</td>
                 <td>{$cliente['apellido']}</td>
+                 <td>{$cliente['cedula']}</td>
                 <td>{$cliente['dirección']}</td>
                 <td>{$cliente['teléfono']}</td>
                 <td>{$cliente['email']}</td>
@@ -57,22 +60,24 @@ function mostrarClientes($clientes) {
 
     echo "</tbody></table>";
 }
-
 // Agregar nuevo cliente
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = $_POST["nombre"];
     $apellido = $_POST["apellido"];
+    $cedula = $_POST["cedula"]; // Recoge el valor del campo cedula correctamente
     $direccion = $_POST["direccion"];
     $telefono = $_POST["telefono"];
     $email = $_POST["email"];
 
-    $query = $db->prepare("INSERT INTO Clientes (nombre, apellido, dirección, teléfono, email) VALUES (?, ?, ?, ?, ?)");
-    $query->execute([$nombre, $apellido, $direccion, $telefono, $email]);
+    // Preparar la consulta SQL con los campos correctos
+    $query = $db->prepare("INSERT INTO Clientes (nombre, apellido, cedula, dirección, teléfono, email) VALUES (?, ?, ?, ?, ?, ?)");
+    $query->execute([$nombre, $apellido, $cedula, $direccion, $telefono, $email]);
 
-    // Recargar la página para actualizar la tabla
+    // Redirigir para evitar el reenvío del formulario
     header("Location: ".$_SERVER['PHP_SELF']);
     exit;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -140,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
         <a href="inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
     </div>
-<div class="container mt-5">
+    <div class="container mt-5">
     <h2>Agregar Nuevo Cliente</h2>
     <form method="post">
         <div class="form-group">
@@ -150,6 +155,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <div class="form-group">
             <label for="apellido">Apellido:</label>
             <input type="text" class="form-control" id="apellido" name="apellido" required>
+        </div>
+        <div class="form-group">
+            <label for="cedula">Cédula:</label>
+            <input type="text" class="form-control" id="cedula" name="cedula" required>
         </div>
         <div class="form-group">
             <label for="direccion">Dirección:</label>
@@ -166,6 +175,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Cliente</button>
     </form>
 </div>
+
 
 <div class="container mt-4">
     <h2>Lista de Clientes</h2>

@@ -1,5 +1,5 @@
 <?php
-// Conexión a la base de datos
+// Conexión a la base de datos (misma configuración que tractor.php)
 $dbHost = 'localhost';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
@@ -16,6 +16,9 @@ try {
 if (!isset($_GET['tractorID']) || empty($_GET['tractorID'])) {
     die("ID de tractor no proporcionado.");
 }
+$modeloID = isset($tractor['ModeloID']) ? $tractor['ModeloID'] : "";
+$año = isset($tractor['Año']) ? $tractor['Año'] : "";
+$estado = isset($tractor['Estado']) ? $tractor['Estado'] : "";
 
 $tractorID = $_GET['tractorID'];
 
@@ -33,7 +36,7 @@ if (!$tractor) {
 $queryModelos = $db->query("SELECT * FROM ModelosTractores");
 $modelos = $queryModelos->fetchAll(PDO::FETCH_ASSOC);
 
-// Inicializar variables para evitar los warnings
+// Inicializar variables con los valores actuales del tractor
 $modeloID = isset($tractor['ModeloID']) ? $tractor['ModeloID'] : "";
 $año = isset($tractor['Año']) ? $tractor['Año'] : "";
 $estado = isset($tractor['Estado']) ? $tractor['Estado'] : "";
@@ -49,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $query->execute([$modeloID, $año, $estado, $tractorID]);
 
     // Redirigir a la página principal después de la actualización
-    header("Location:tractores.php");
+    header("Location: tractor.php");
     exit;
 }
 ?>
@@ -69,10 +72,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label for="modeloID">Modelo:</label>
                 <select class="form-control" id="modeloID" name="modeloID" required>
-                    <?php foreach ($modelos as $modelo): ?>
-                        <option value="<?php echo $modelo['ModeloID']; ?>" <?php if ($modelo['ModeloID'] == $modeloID) echo 'selected'; ?>><?php echo $modelo['Marca'] . ' - ' . $modelo['Modelo']; ?></option>
-                    <?php endforeach; ?>
-                </select>
+    <?php foreach ($modelos as $modelo): ?>
+        <option value="<?php echo $modelo['ModeloID']; ?>" <?php if ($modelo['ModeloID'] == $modeloID) echo 'selected'; ?>>
+            <?php echo $modelo['Marca'] . ' - ' . $modelo['Modelo']; ?>
+        </option>
+    <?php endforeach; ?>
+</select>
+
             </div>
             <div class="form-group">
                 <label for="año">Año:</label>
@@ -88,4 +94,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
         </form>
-    </
+    </div>
+</body>
+</html>
