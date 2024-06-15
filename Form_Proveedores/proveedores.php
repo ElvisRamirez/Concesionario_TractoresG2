@@ -86,12 +86,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <style>
     /* Estilo personalizado */
     body {
+        padding-left: 20%;
       padding-top: 56px; /* Ajusta el contenido para evitar que se superponga al nav */
       overflow-x: hidden; /* Evita la barra de desplazamiento horizontal */
     }
     .sidenav {
       height: 100%;
-      width: 250px;
+      width: 200px;
       position: fixed;
       z-index: 1;
       top: 0;
@@ -125,9 +126,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   </style>
 <body>
 <div class="sidenav" id="mySidenav">
-        <a href="index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
-        <a href="Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
-        <a href="Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
+        <a href="../index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
+        <a href="../Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
+        <a href="../Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
         <a href="proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
         <a href="tractores.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
         <a href="ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
