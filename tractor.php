@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 $precioCompra = $_POST["precioCompra"];
 
 // Calcular el precio unitario para los clientes (precio de compra + 15%)
-$precioUnitario = $precioCompra * 1.15;
+$precioUnitario = ($precioCompra / $cantidad) * 1.15;
 
 // Insertar el nuevo tractor en la tabla Tractores
 $query = $db->prepare("INSERT INTO Tractores (ModeloID, Imagen, Año, Estado) VALUES (?, ?, ?, ?)");
@@ -108,7 +108,7 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
         /* Estilo personalizado */
         body {
             padding-left: 20%;
-            padding-top: 50px; /* Ajusta el contenido para evitar que se superponga al nav */
+            padding-top: 0px; /* Ajusta el contenido para evitar que se superponga al nav */
             overflow-x: hidden; /* Evita la barra de desplazamiento horizontal */
         }
         .sidenav {
@@ -154,7 +154,12 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
     <a href="pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
     <a href="inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
 </div>
-<div class="container mt-5">
+
+<div class="container mt-5 content">
+    <!-- Botón para registrar un nuevo modelo de tractor -->
+    <div class="container mt-3 text-right">
+    <a href="nuevo_modelo_tractor.php" class="btn btn-success"><i class="fas fa-plus"></i> Nuevo Modelo de Tractor</a>
+</div>
     <h1>Concesionario de Tractores</h1>
     
     <h2>Agregar Nuevo Tractor</h2>
@@ -207,34 +212,32 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
                     <option value="alquilado">Alquilado</option>
                 </select>
             </div>
-    
+
             <div class="form-group col-md-4">
-    <label for="precioUnitario">Precio Unitario (sin IVA):</label>
-    <input type="number" class="form-control" name="precioUnitario" id="precioUnitario" step="0.01" min="0" required>
-</div>
+                <label for="precioUnitario">Precio Unitario (sin IVA):</label>
+                <input type="number" class="form-control" name="precioUnitario" id="precioUnitario" step="0.01" min="0" required>
+            </div>
 
-<div class="form-group col-md-4">
-    <label for="cantidad">Cantidad:</label>
-    <input type="number" class="form-control" name="cantidad" id="cantidad" min="1" required onchange="calcularPrecioCompra()">
-</div>
+            <div class="form-group col-md-4">
+                <label for="cantidad">Cantidad:</label>
+                <input type="number" class="form-control" name="cantidad" id="cantidad" min="1" required onchange="calcularPrecioCompra()">
+            </div>
 
-<div class="form-group col-md-4">
-    <label for="precioCompra">Precio de Compra:</label>
-    <input type="number" class="form-control" name="precioCompra" id="precioCompra" step="0.01" min="0" readonly>
-</div>
-<script>
-    function calcularPrecioCompra() {
-        var precioUnitario = parseFloat(document.getElementById('precioUnitario').value);
-        var cantidad = parseInt(document.getElementById('cantidad').value);
+            <div class="form-group col-md-4">
+                <label for="precioCompra">Precio de Compra:</label>
+                <input type="number" class="form-control" name="precioCompra" id="precioCompra" step="0.01" min="0" readonly>
+            </div>
+            <script>
+                function calcularPrecioCompra() {
+                    var precioUnitario = parseFloat(document.getElementById('precioUnitario').value);
+                    var cantidad = parseInt(document.getElementById('cantidad').value);
 
-        if (!isNaN(precioUnitario) && !isNaN(cantidad) && cantidad > 0) {
-            var precioCompra = precioUnitario * cantidad;
-            document.getElementById('precioCompra').value = precioCompra.toFixed(2);
-        }
-    }
-</script>
-
-
+                    if (!isNaN(precioUnitario) && !isNaN(cantidad) && cantidad > 0) {
+                        var precioCompra = precioUnitario * cantidad;
+                        document.getElementById('precioCompra').value = precioCompra.toFixed(2);
+                    }
+                }
+            </script>
         </div>
         
         <div class="form-row">
@@ -246,11 +249,11 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
         
         <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Tractor</button>
     </form>
-</div>
 
+    
 
- 
-    <table class="table table-bordered">
+    <!-- Tabla de tractores existentes -->
+    <table class="table table-bordered mt-4">
         <thead>
             <tr>
                 <th>ID</th>
@@ -264,23 +267,24 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
         </thead>
         <tbody>
             <?php foreach ($tractores as $tractor): ?>
-            <tr>
-                <td><?php echo $tractor['tractorid']; ?></td>
-                <td><?php echo $tractor['modelo']; ?></td>
-                <td><?php echo $tractor['marca']; ?></td>
-                <td><?php echo $tractor['año']; ?></td>
-                <td><?php echo $tractor['estado']; ?></td>
-                <td>
-                    <img src="data:image/jpeg;base64,<?php echo $tractor['imagenbase64']; ?>" class="table-img">
-                </td>
-                <td>
-                    <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" style="display:inline;">
-                        <input type="hidden" name="tractorID" value="<?php echo $tractor['tractorid']; ?>">
-                        <button type="submit" name="eliminarTractor" class="btn btn-danger btn-sm">Eliminar</button>
-                    </form>
-                    <a href="editar_tractor.php?tractorID=<?php echo $tractor['tractorid']; ?>" class="btn btn-warning btn-sm">Editar</a>
-                </td>
-            </tr>
+                <tr>
+                    <td><?php echo $tractor['tractorid']; ?></td>
+                    <td><?php echo $tractor['modelo']; ?></td>
+                    <td><?php echo $tractor['marca']; ?></td>
+                    <td><?php echo $tractor['año']; ?></td>
+                    <td><?php echo $tractor['estado']; ?></td>
+                    <td>
+                        <img src="data:image/jpeg;base64,<?php echo $tractor['imagenbase64']; ?>" class="table-img">
+                    </td>
+                    <td>
+                        <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" style="display:inline;">
+                            <input type="hidden" name
+                            ="tractorID" value="<?php echo $tractor['tractorid']; ?>">
+                            <button type="submit" name="eliminarTractor" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                        <a href="editar_tractor.php?tractorID=<?php echo $tractor['tractorid']; ?>" class="btn btn-warning btn-sm">Editar</a>
+                    </td>
+                </tr>
             <?php endforeach; ?>
         </tbody>
     </table>

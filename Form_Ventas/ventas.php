@@ -67,14 +67,14 @@ function realizarVenta($db, $clienteID, $empleadoID, $tractorID, $cantidad, $pre
         ");
         $queryDescripcion->execute([$tractorID]);
         $tractor = $queryDescripcion->fetch(PDO::FETCH_ASSOC);
-       
+
         // Verificar si las claves 'Marca' y 'Modelo' están definidas en $tractor
-if (isset($tractor['Marca']) && isset($tractor['Modelo'])) {
-    $descripcion = $tractor['Marca'] . ' ' . $tractor['Modelo'];
-} else {
-    // Manejar la situación donde las claves no están definidas
-    $descripcion = 'Descripción no disponible';
-}
+        if (isset($tractor['Marca']) && isset($tractor['Modelo'])) {
+            $descripcion = $tractor['Marca'] . ' ' . $tractor['Modelo'];
+        } else {
+            // Manejar la situación donde las claves no están definidas
+            $descripcion = 'Descripción no disponible';
+        }
 
         // Insertar en tabla DetallesFactura
         $queryDetalleFactura = $db->prepare("
@@ -93,16 +93,13 @@ if (isset($tractor['Marca']) && isset($tractor['Modelo'])) {
 
         // Confirmar transacción
         $db->commit();
-        return true;
+        return $facturaID; // Devolver el ID de la factura para su uso posterior
     } catch (PDOException $e) {
         // Revertir transacción en caso de error
         $db->rollBack();
         throw $e;
     }
 }
-
-
-
 
 // Procesar el formulario cuando se envía
 $nombreCliente = "";
@@ -114,6 +111,7 @@ $precioUnitario = 0.00;
 $cantidad = 1;
 $totalVenta = 0.00;
 $mensajeError = "";
+$mensajePago = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["buscarCedulaCliente"])) {
@@ -170,8 +168,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $mensajeError = "Debe seleccionar un cliente y un empleado válidos.";
                     } else {
                         try {
-                            realizarVenta($db, $clienteID, $empleadoID, $idTractorSeleccionado, $cantidad, $precioUnitario);
-                            $mensajeError = "Venta realizada con éxito.";
+                            $facturaID = realizarVenta($db, $clienteID, $empleadoID, $idTractorSeleccionado, $cantidad, $precioUnitario);
+
+                            // Registrar el pago
+                            $montoPago = $totalVenta;
+                            $fechaPago = date("Y-m-d");
+                            $formaPago = $_POST["formaPago"];
+
+                            $queryPago = $db->prepare("
+                                INSERT INTO Pagos (FacturaID, FechaPago, MontoPago, FormaPago)
+                                VALUES (?, ?, ?, ?)
+                            ");
+                            $queryPago->execute([$facturaID, $fechaPago, $montoPago, $formaPago]);
+
+                            $mensajePago = "Pago registrado con éxito.";
                         } catch (PDOException $e) {
                             $mensajeError = "Error al realizar la venta: " . $e->getMessage();
                         }
@@ -184,52 +194,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Obtener la lista de tractores disponibles al cargar la página
     $tractoresDisponibles = obtenerTractoresDisponibles($db);
 }
-// Procesar el formulario cuando se envía (parte existente del código)
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Código existente para ventas y detalles de factura...
-
-    // Procesar el pago si se envió el formulario de pago
-    if (isset($_POST["realizarPago"])) {
-        // Validar y obtener datos del formulario
-        $montoPago = $_POST["montoPago"];
-        $fechaPago = isset($_POST["fechaPago"]) ? $_POST["fechaPago"] : date("Y-m-d");
-        $formaPago = $_POST["formaPago"]; // Nuevo campo para la forma de pago
-
-        try {
-            // Iniciar transacción para asegurar integridad
-            $db->beginTransaction();
-
-            // Insertar en la tabla Pagos dependiendo de la forma de pago
-            if ($formaPago === "Efectivo") {
-                // Insertar pago en efectivo
-                $queryPago = $db->prepare("
-                    INSERT INTO Pagos (FacturaID, FechaPago, MontoPago, FormaPago)
-                    VALUES (?, ?, ?, ?)
-                ");
-                $queryPago->execute([$facturaID, $fechaPago, $montoPago, $formaPago]);
-            } else if ($formaPago === "Tarjeta") {
-                // Insertar pago con tarjeta
-                $numeroTarjeta = $_POST["numeroTarjeta"]; // Asegúrate de capturar este dato del formulario
-                // Aquí podrías hacer un INSERT con más detalles si los necesitas
-                $queryPago = $db->prepare("
-                    INSERT INTO Pagos (FacturaID, FechaPago, MontoPago, FormaPago, NumeroTarjeta)
-                    VALUES (?, ?, ?, ?, ?)
-                ");
-                $queryPago->execute([$facturaID, $fechaPago, $montoPago, $formaPago, $numeroTarjeta]);
-            }
-
-            // Confirmar transacción
-            $db->commit();
-
-            $mensajePago = "Pago registrado con éxito.";
-        } catch (PDOException $e) {
-            // Revertir transacción en caso de error
-            $db->rollBack();
-            $mensajePago = "Error al registrar el pago: " . $e->getMessage();
-        }
-    }
-}
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -247,6 +211,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <?php if ($mensajeError): ?>
         <div class="alert alert-danger"><?php echo htmlspecialchars($mensajeError); ?></div>
     <?php endif; ?>
+    <?php if ($mensajePago): ?>
+        <div class="alert alert-success"><?php echo htmlspecialchars($mensajePago); ?></div>
+    <?php endif; ?>
     <form method="post" action="">
         <div class="form-group">
             <label for="buscarCedulaCliente">Cédula del Cliente:</label>
@@ -254,8 +221,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <div class="form-group">
             <label for="nombreCliente">Nombre Cliente:</label>
-            <input type="text" class="form-control"
-            id="nombreCliente" name="nombreCliente" value="<?php echo htmlspecialchars($nombreCliente); ?>" readonly>
+            <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" value="<?php echo htmlspecialchars($nombreCliente); ?>" readonly>
         </div>
         <div class="form-group">
             <label for="apellidoCliente">Apellido Cliente:</label>
@@ -293,15 +259,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="cantidad">Cantidad:</label>
             <input type="number" class="form-control" id="cantidad" name="cantidad" value="<?php echo htmlspecialchars($cantidad); ?>" min="1" onchange="this.form.submit()">
         </div>
-      
-<div class="form-group">
-    <label for="formaPago">Forma de Pago:</label>
-    <select class="form-control" id="formaPago" name="formaPago" required>
-        <option value="efectivo">Efectivo</option>
-        <option value="tarjeta">Tarjeta</option>
-    </select>
-</div>
-
+        <div class="form-group">
+            <label for="formaPago">Forma de Pago:</label>
+            <select class="form-control" id="formaPago" name="formaPago" required>
+                <option value="efectivo">Efectivo</option>
+                <option value="tarjeta">Tarjeta</option>
+            </select>
+        </div>
         <div class="form-group">
             <label for="totalVenta">Total Venta:</label>
             <input type="text" class="form-control" id="totalVenta" name="totalVenta" value="<?php echo htmlspecialchars(number_format($totalVenta, 2)); ?>" readonly>
