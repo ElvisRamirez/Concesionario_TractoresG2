@@ -12,57 +12,224 @@ try {
     die("Error al conectar a la base de datos: " . $e->getMessage());
 }
 
-// Función para obtener nombre y apellido por cédula de cliente
-function obtenerNombreApellidoCliente($db, $cedula) {
-    $query = $db->prepare("SELECT nombre, apellido FROM Clientes WHERE cedula = ?");
+// Función para obtener el ID, nombre y apellido por cédula de cliente
+function obtenerClientePorCedula($db, $cedula) {
+    $query = $db->prepare("SELECT ClienteID, Nombre, Apellido FROM Clientes WHERE Cedula = ?");
     $query->execute([$cedula]);
-    $resultado = $query->fetch(PDO::FETCH_ASSOC);
-    return $resultado;
+    return $query->fetch(PDO::FETCH_ASSOC);
 }
 
-// Función para obtener nombre y apellido por cédula de empleado
-function obtenerNombreApellidoEmpleado($db, $cedula) {
-    $query = $db->prepare("SELECT nombre, apellido FROM Empleados WHERE cedula = ?");
+// Función para obtener el ID, nombre y apellido por cédula de empleado
+function obtenerEmpleadoPorCedula($db, $cedula) {
+    $query = $db->prepare("SELECT EmpleadoID, Nombre, Apellido FROM Empleados WHERE Cedula = ?");
     $query->execute([$cedula]);
-    $resultado = $query->fetch(PDO::FETCH_ASSOC);
-    return $resultado;
+    return $query->fetch(PDO::FETCH_ASSOC);
 }
+
+// Función para obtener tractores disponibles con modelo, marca y precio unitario
+function obtenerTractoresDisponibles($db) {
+    $query = $db->prepare("
+        SELECT t.TractorID, m.Marca, m.Modelo, i.PrecioUnitario, i.Cantidad AS CantidadDisponible
+        FROM Tractores t
+        INNER JOIN ModelosTractores m ON t.ModeloID = m.ModeloID
+        INNER JOIN Inventario i ON t.TractorID = i.TractorID
+        WHERE t.Estado = 'disponible'
+    ");
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Función para realizar una venta y actualizar el inventario
+function realizarVenta($db, $clienteID, $empleadoID, $tractorID, $cantidad, $precioUnitario) {
+    try {
+        // Iniciar transacción
+        $db->beginTransaction();
+
+        // Insertar en tabla Facturas
+        $queryVenta = $db->prepare("
+            INSERT INTO Facturas (ClienteID, EmpleadoID, FechaFactura, TotalFactura) 
+            VALUES (?, ?, CURRENT_DATE, ?)
+            RETURNING FacturaID
+        ");
+        $totalVenta = $cantidad * $precioUnitario;
+        $queryVenta->execute([$clienteID, $empleadoID, $totalVenta]);
+        $facturaID = $queryVenta->fetchColumn();
+
+        // Obtener la descripción del tractor vendido desde la tabla ModelosTractores
+        $queryDescripcion = $db->prepare("
+            SELECT Marca, Modelo
+            FROM ModelosTractores
+            WHERE ModeloID = (
+                SELECT ModeloID
+                FROM Tractores
+                WHERE TractorID = ?
+            )
+        ");
+        $queryDescripcion->execute([$tractorID]);
+        $tractor = $queryDescripcion->fetch(PDO::FETCH_ASSOC);
+       
+        // Verificar si las claves 'Marca' y 'Modelo' están definidas en $tractor
+if (isset($tractor['Marca']) && isset($tractor['Modelo'])) {
+    $descripcion = $tractor['Marca'] . ' ' . $tractor['Modelo'];
+} else {
+    // Manejar la situación donde las claves no están definidas
+    $descripcion = 'Descripción no disponible';
+}
+
+        // Insertar en tabla DetallesFactura
+        $queryDetalleFactura = $db->prepare("
+            INSERT INTO DetallesFactura (FacturaID, Descripcion, PrecioUnitario, Cantidad) 
+            VALUES (?, ?, ?, ?)
+        ");
+        $queryDetalleFactura->execute([$facturaID, $descripcion, $precioUnitario, $cantidad]);
+
+        // Actualizar inventario
+        $queryActualizarInventario = $db->prepare("
+            UPDATE Inventario 
+            SET Cantidad = Cantidad - ? 
+            WHERE TractorID = ?
+        ");
+        $queryActualizarInventario->execute([$cantidad, $tractorID]);
+
+        // Confirmar transacción
+        $db->commit();
+        return true;
+    } catch (PDOException $e) {
+        // Revertir transacción en caso de error
+        $db->rollBack();
+        throw $e;
+    }
+}
+
+
+
 
 // Procesar el formulario cuando se envía
 $nombreCliente = "";
 $apellidoCliente = "";
 $nombreEmpleado = "";
 $apellidoEmpleado = "";
+$tractoresDisponibles = [];
+$precioUnitario = 0.00;
+$cantidad = 1;
+$totalVenta = 0.00;
+$mensajeError = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["buscarCedulaCliente"])) {
         $buscarCedulaCliente = $_POST["buscarCedulaCliente"];
         
-        // Buscar el nombre y apellido del cliente por cédula
-        $cliente = obtenerNombreApellidoCliente($db, $buscarCedulaCliente);
+        // Buscar el ID, nombre y apellido del cliente por cédula
+        $cliente = obtenerClientePorCedula($db, $buscarCedulaCliente);
         if ($cliente) {
+            $clienteID = $cliente['clienteid'];
             $nombreCliente = $cliente['nombre'];
             $apellidoCliente = $cliente['apellido'];
         } else {
-            $nombreCliente = "";
-            $apellidoCliente = "";
+            $mensajeError = "Cliente no encontrado.";
         }
     }
 
     if (isset($_POST["buscarCedulaEmpleado"])) {
         $buscarCedulaEmpleado = $_POST["buscarCedulaEmpleado"];
         
-        // Buscar el nombre y apellido del empleado por cédula
-        $empleado = obtenerNombreApellidoEmpleado($db, $buscarCedulaEmpleado);
+        // Buscar el ID, nombre y apellido del empleado por cédula
+        $empleado = obtenerEmpleadoPorCedula($db, $buscarCedulaEmpleado);
         if ($empleado) {
+            $empleadoID = $empleado['empleadoid'];
             $nombreEmpleado = $empleado['nombre'];
             $apellidoEmpleado = $empleado['apellido'];
         } else {
-            $nombreEmpleado = "";
-            $apellidoEmpleado = "";
+            $mensajeError = "Empleado no encontrado.";
+        }
+    }
+
+    // Obtener la lista de tractores disponibles
+    $tractoresDisponibles = obtenerTractoresDisponibles($db);
+
+    if (isset($_POST["idTractorSeleccionado"])) {
+        $idTractorSeleccionado = $_POST["idTractorSeleccionado"];
+        
+        // Obtener el precio unitario del tractor seleccionado
+        foreach ($tractoresDisponibles as $tractor) {
+            if ($tractor['tractorid'] == $idTractorSeleccionado) {
+                $precioUnitario = $tractor['preciounitario'];
+                $cantidadDisponible = $tractor['cantidaddisponible'];
+                break;
+            }
+        }
+
+        if (isset($_POST["cantidad"])) {
+            $cantidad = $_POST["cantidad"];
+            if ($cantidad > $cantidadDisponible) {
+                $mensajeError = "No hay suficiente cantidad disponible para el tractor seleccionado.";
+            } else {
+                $totalVenta = $precioUnitario * $cantidad;
+                if (isset($_POST["realizarVenta"])) {
+                    if (!isset($clienteID) || !isset($empleadoID)) {
+                        $mensajeError = "Debe seleccionar un cliente y un empleado válidos.";
+                    } else {
+                        try {
+                            realizarVenta($db, $clienteID, $empleadoID, $idTractorSeleccionado, $cantidad, $precioUnitario);
+                            $mensajeError = "Venta realizada con éxito.";
+                        } catch (PDOException $e) {
+                            $mensajeError = "Error al realizar la venta: " . $e->getMessage();
+                        }
+                    }
+                }
+            }
+        }
+    }
+} else {
+    // Obtener la lista de tractores disponibles al cargar la página
+    $tractoresDisponibles = obtenerTractoresDisponibles($db);
+}
+// Procesar el formulario cuando se envía (parte existente del código)
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Código existente para ventas y detalles de factura...
+
+    // Procesar el pago si se envió el formulario de pago
+    if (isset($_POST["realizarPago"])) {
+        // Validar y obtener datos del formulario
+        $montoPago = $_POST["montoPago"];
+        $fechaPago = isset($_POST["fechaPago"]) ? $_POST["fechaPago"] : date("Y-m-d");
+        $formaPago = $_POST["formaPago"]; // Nuevo campo para la forma de pago
+
+        try {
+            // Iniciar transacción para asegurar integridad
+            $db->beginTransaction();
+
+            // Insertar en la tabla Pagos dependiendo de la forma de pago
+            if ($formaPago === "Efectivo") {
+                // Insertar pago en efectivo
+                $queryPago = $db->prepare("
+                    INSERT INTO Pagos (FacturaID, FechaPago, MontoPago, FormaPago)
+                    VALUES (?, ?, ?, ?)
+                ");
+                $queryPago->execute([$facturaID, $fechaPago, $montoPago, $formaPago]);
+            } else if ($formaPago === "Tarjeta") {
+                // Insertar pago con tarjeta
+                $numeroTarjeta = $_POST["numeroTarjeta"]; // Asegúrate de capturar este dato del formulario
+                // Aquí podrías hacer un INSERT con más detalles si los necesitas
+                $queryPago = $db->prepare("
+                    INSERT INTO Pagos (FacturaID, FechaPago, MontoPago, FormaPago, NumeroTarjeta)
+                    VALUES (?, ?, ?, ?, ?)
+                ");
+                $queryPago->execute([$facturaID, $fechaPago, $montoPago, $formaPago, $numeroTarjeta]);
+            }
+
+            // Confirmar transacción
+            $db->commit();
+
+            $mensajePago = "Pago registrado con éxito.";
+        } catch (PDOException $e) {
+            // Revertir transacción en caso de error
+            $db->rollBack();
+            $mensajePago = "Error al registrar el pago: " . $e->getMessage();
         }
     }
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,30 +242,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
 
-<div class="sidenav" id="mySidenav">
-    <!-- Links a otras secciones (no relevantes para este formulario) -->
-</div>
-
 <div class="container mt-5">
     <h2>Realizar Nueva Venta</h2>
-    <form id="formVenta" method="post" action="">
+    <?php if ($mensajeError): ?>
+        <div class="alert alert-danger"><?php echo htmlspecialchars($mensajeError); ?></div>
+    <?php endif; ?>
+    <form method="post" action="">
         <div class="form-group">
-            <label for="buscarCedulaCliente">Buscar por Cédula del Cliente:</label>
-            <input type="text" class="form-control" id="buscarCedulaCliente" name="buscarCedulaCliente" placeholder="Ingrese la cédula del cliente..." value="<?php echo isset($buscarCedulaCliente) ? htmlspecialchars($buscarCedulaCliente) : ''; ?>">
+            <label for="buscarCedulaCliente">Cédula del Cliente:</label>
+            <input type="text" class="form-control" id="buscarCedulaCliente" name="buscarCedulaCliente" placeholder="Ingrese la cédula del cliente" value="<?php echo isset($buscarCedulaCliente) ? htmlspecialchars($buscarCedulaCliente) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="nombreCliente">Nombre Cliente:</label>
-            <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" value="<?php echo htmlspecialchars($nombreCliente); ?>" readonly>
+            <input type="text" class="form-control"
+            id="nombreCliente" name="nombreCliente" value="<?php echo htmlspecialchars($nombreCliente); ?>" readonly>
         </div>
         <div class="form-group">
             <label for="apellidoCliente">Apellido Cliente:</label>
             <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" value="<?php echo htmlspecialchars($apellidoCliente); ?>" readonly>
         </div>
-        <hr> <!-- Separador para claridad -->
-
         <div class="form-group">
-            <label for="buscarCedulaEmpleado">Buscar por Cédula del Empleado:</label>
-            <input type="text" class="form-control" id="buscarCedulaEmpleado" name="buscarCedulaEmpleado" placeholder="Ingrese la cédula del empleado..." value="<?php echo isset($buscarCedulaEmpleado) ? htmlspecialchars($buscarCedulaEmpleado) : ''; ?>">
+            <label for="buscarCedulaEmpleado">Cédula del Empleado:</label>
+            <input type="text" class="form-control" id="buscarCedulaEmpleado" name="buscarCedulaEmpleado" placeholder="Ingrese la cédula del empleado" value="<?php echo isset($buscarCedulaEmpleado) ? htmlspecialchars($buscarCedulaEmpleado) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="nombreEmpleado">Nombre Empleado:</label>
@@ -108,14 +273,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="apellidoEmpleado">Apellido Empleado:</label>
             <input type="text" class="form-control" id="apellidoEmpleado" name="apellidoEmpleado" value="<?php echo htmlspecialchars($apellidoEmpleado); ?>" readonly>
         </div>
+        <hr> <!-- Separador para claridad -->
+        <div class="form-group">
+            <label for="idTractorSeleccionado">Seleccionar Tractor:</label>
+            <select class="form-control" id="idTractorSeleccionado" name="idTractorSeleccionado" onchange="this.form.submit()">
+                <option value="">Seleccione un tractor...</option>
+                <?php foreach ($tractoresDisponibles as $tractor): ?>
+                    <option value="<?php echo $tractor['tractorid']; ?>" <?php echo isset($idTractorSeleccionado) && $idTractorSeleccionado == $tractor['tractorid'] ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($tractor['marca'] . ' ' . $tractor['modelo'] . ' - $' . number_format($tractor['preciounitario'], 2)); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="precioUnitario">Precio Unitario:</label>
+            <input type="text" class="form-control" id="precioUnitario" name="precioUnitario" value="<?php echo htmlspecialchars(number_format($precioUnitario, 2)); ?>" readonly>
+        </div>
+        <div class="form-group">
+            <label for="cantidad">Cantidad:</label>
+            <input type="number" class="form-control" id="cantidad" name="cantidad" value="<?php echo htmlspecialchars($cantidad); ?>" min="1" onchange="this.form.submit()">
+        </div>
+      
+<div class="form-group">
+    <label for="formaPago">Forma de Pago:</label>
+    <select class="form-control" id="formaPago" name="formaPago" required>
+        <option value="efectivo">Efectivo</option>
+        <option value="tarjeta">Tarjeta</option>
+    </select>
+</div>
 
-        <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Realizar Venta</button>
+        <div class="form-group">
+            <label for="totalVenta">Total Venta:</label>
+            <input type="text" class="form-control" id="totalVenta" name="totalVenta" value="<?php echo htmlspecialchars(number_format($totalVenta, 2)); ?>" readonly>
+        </div>
+        <button type="submit" class="btn btn-primary" name="realizarVenta">Realizar Venta</button>
     </form>
 </div>
 
-<!-- Scripts de Bootstrap y Font Awesome -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </body>
