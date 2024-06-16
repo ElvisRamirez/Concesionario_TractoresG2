@@ -1,7 +1,7 @@
 USE DATABASE  Concesionario_Tractores
 
-
-select * from Empleados
+select * from DetallesAlquiler
+select * from Alquileres
 select * from ModelosTractores
 	select * from DetallesVenta	
 -- Ahora crea las tablas y los índices en la nueva base de datos

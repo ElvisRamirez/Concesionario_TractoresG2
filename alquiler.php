@@ -4,7 +4,6 @@ $dbHost = 'localhost';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
-$alquilerID = null;
 
 try {
     $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
@@ -13,37 +12,60 @@ try {
     die("Error al conectar a la base de datos: " . $e->getMessage());
 }
 
-// Otras partes de tu código...
-
 $mensajeError = ""; // Variable para almacenar mensajes de error
 $mensajeAlquiler = ""; // Variable para almacenar mensajes de éxito
+
+$clienteID = null;
+$empleadoID = null;
+$nombreCliente = "";
+$apellidoCliente = "";
+$nombreEmpleado = "";
+$apellidoEmpleado = "";
+$tractoresDisponibles = [];
+$totalAlquiler = 0.00;
+$precioPorDia = 0.00; // Precio por día por defecto
+$cantidad = 1; // Cantidad de tractores por defecto
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["buscarCedulaCliente"])) {
         $buscarCedulaCliente = $_POST["buscarCedulaCliente"];
-        
-        // Buscar el ID, nombre y apellido del cliente por cédula
-        $cliente = obtenerClientePorCedula($db, $buscarCedulaCliente);
+        // Lógica para buscar el cliente por cédula
+        $queryCliente = $db->prepare("
+            SELECT ClienteID, Nombre, Apellido
+            FROM Clientes
+            WHERE Cedula = :cedula
+        ");
+        $queryCliente->bindParam(":cedula", $buscarCedulaCliente);
+        $queryCliente->execute();
+        $cliente = $queryCliente->fetch(PDO::FETCH_ASSOC);
+
         if ($cliente) {
-            $clienteID = $cliente['clienteid'];
+            $clienteID = $cliente['clienteid']; // Asignar el ClienteID encontrado
             $nombreCliente = $cliente['nombre'];
             $apellidoCliente = $cliente['apellido'];
         } else {
-            $mensajeError = "Cliente no encontrado.";
+            $mensajeError = "Cliente no encontrado con la cédula proporcionada.";
         }
     }
 
     if (isset($_POST["buscarCedulaEmpleado"])) {
         $buscarCedulaEmpleado = $_POST["buscarCedulaEmpleado"];
-        
-        // Buscar el ID, nombre y apellido del empleado por cédula
-        $empleado = obtenerEmpleadoPorCedula($db, $buscarCedulaEmpleado);
+        // Lógica para buscar el empleado por cédula
+        $queryEmpleado = $db->prepare("
+            SELECT EmpleadoID, Nombre, Apellido
+            FROM Empleados
+            WHERE Cedula = :cedula
+        ");
+        $queryEmpleado->bindParam(":cedula", $buscarCedulaEmpleado);
+        $queryEmpleado->execute();
+        $empleado = $queryEmpleado->fetch(PDO::FETCH_ASSOC);
+
         if ($empleado) {
-            $empleadoID = $empleado['empleadoid'];
+            $empleadoID = $empleado['empleadoid']; // Asignar el EmpleadoID encontrado
             $nombreEmpleado = $empleado['nombre'];
             $apellidoEmpleado = $empleado['apellido'];
         } else {
-            $mensajeError = "Empleado no encontrado.";
+            $mensajeError = "Empleado no encontrado con la cédula proporcionada.";
         }
     }
 
@@ -52,112 +74,70 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if (isset($_POST["idTractorSeleccionado"])) {
         $idTractorSeleccionado = $_POST["idTractorSeleccionado"];
-        
-        // Validar y procesar fechas de inicio y fin del alquiler
-        $fechaInicio = isset($_POST["fechaInicio"]) ? $_POST["fechaInicio"] : null;
-        $fechaFin = isset($_POST["fechaFin"]) ? $_POST["fechaFin"] : null;
+        // Lógica para procesar el alquiler
+        $fechaInicio = $_POST["fechaInicio"];
+        $fechaFin = $_POST["fechaFin"];
 
-        if (!$fechaInicio || !$fechaFin) {
-            $mensajeError = "Debe seleccionar ambas fechas de inicio y fin del alquiler.";
-        } else {
-            // Validar que la fecha de fin sea posterior a la fecha de inicio
-            if (strtotime($fechaFin) <= strtotime($fechaInicio)) {
-                $mensajeError = "La fecha de fin debe ser posterior a la fecha de inicio.";
-            } else {
-                // Calcular el total del alquiler basado en el precio por día ingresado
-                $precioPorDia = isset($_POST["precioPorDia"]) ? floatval($_POST["precioPorDia"]) : 0.00;
-                if ($precioPorDia <= 0) {
-                    $mensajeError = "El precio por día debe ser mayor que cero.";
-                } else {
-                    // Obtener la cantidad de tractores seleccionada
-                    $cantidad = isset($_POST["cantidad"]) ? intval($_POST["cantidad"]) : 1;
+        // Obtener el precio por día del formulario si está presente
+        $precioPorDia = isset($_POST["precioPorDia"]) ? floatval($_POST["precioPorDia"]) : 0.00;
 
-                    try {
-                        // Realizar el alquiler con la cantidad de tractores
-                        $alquilerID = realizarAlquiler($db, $clienteID, $empleadoID, $idTractorSeleccionado, $fechaInicio, $fechaFin, $precioPorDia, $cantidad);
+        // Calcular el total de alquiler solo si las fechas están completas
+        if (!empty($fechaInicio) && !empty($fechaFin) && $precioPorDia > 0) {
+            // Calcular días de alquiler
+            $inicio = new DateTime($fechaInicio);
+            $fin = new DateTime($fechaFin);
+            $diferencia = $inicio->diff($fin);
+            $diasAlquiler = $diferencia->days + 1; // Sumar 1 para incluir el último día
 
-                        $mensajeAlquiler = "Alquiler registrado con éxito. ID del alquiler: " . $alquilerID;
-                    } catch (PDOException $e) {
-                        $mensajeError = "Error al realizar el alquiler: " . $e->getMessage();
-                    }
-                }
+            // Obtener la cantidad de tractores seleccionada
+            $cantidad = isset($_POST["cantidad"]) ? intval($_POST["cantidad"]) : 1;
+
+            // Calcular total de alquiler
+            $totalAlquiler = $diasAlquiler * $precioPorDia * $cantidad;
+
+            // Insertar en la tabla Alquileres
+            $insertAlquiler = $db->prepare("
+                INSERT INTO Alquileres (ClienteID, EmpleadoID, FechaInicio, FechaFin, TotalAlquiler)
+                VALUES (:clienteID, :empleadoID, :fechaInicio, :fechaFin, :totalAlquiler)
+            ");
+
+            $insertAlquiler->bindParam(":clienteID", $clienteID);
+            $insertAlquiler->bindParam(":empleadoID", $empleadoID);
+            $insertAlquiler->bindParam(":fechaInicio", $fechaInicio);
+            $insertAlquiler->bindParam(":fechaFin", $fechaFin);
+            $insertAlquiler->bindParam(":totalAlquiler", $totalAlquiler);
+
+            try {
+                $db->beginTransaction();
+
+                // Insertar el registro de alquiler
+                $insertAlquiler->execute();
+                $alquilerID = $db->lastInsertId();
+
+                // Insertar detalles del alquiler en DetallesAlquiler
+                $insertDetalle = $db->prepare("
+                    INSERT INTO DetallesAlquiler (AlquilerID, TractorID, PrecioUnitario, Cantidad)
+                    VALUES (:alquilerID, :tractorID, :precioPorDia, :cantidad)
+                ");
+
+                $insertDetalle->bindParam(":alquilerID", $alquilerID);
+                $insertDetalle->bindParam(":tractorID", $idTractorSeleccionado);
+                $insertDetalle->bindParam(":precioPorDia", $precioPorDia);
+                $insertDetalle->bindParam(":cantidad", $cantidad);
+
+                $insertDetalle->execute();
+
+                $db->commit();
+
+                $mensajeAlquiler = "Alquiler registrado exitosamente.";
+            } catch (PDOException $e) {
+                $db->rollBack();
+                $mensajeError = "Error al registrar el alquiler: " . $e->getMessage();
             }
+        } else {
+            $mensajeError = "Por favor complete las fechas y el precio por día correctamente.";
         }
-    } else {
-        // Obtener la lista de tractores disponibles al cargar la página
-        $tractoresDisponibles = obtenerTractoresDisponibles($db);
     }
-}
-
-// Aquí se mostrarán los mensajes de error y éxito
-if (!empty($mensajeError)) {
-    echo '<div class="alert alert-danger">' . htmlspecialchars($mensajeError) . '</div>';
-}
-if (!empty($mensajeAlquiler)) {
-    echo '<div class="alert alert-success">' . htmlspecialchars($mensajeAlquiler) . '</div>';
-}
-
-// Resto de tu código HTML y formularios...
-
-// Procesar el formulario cuando se envía
-$nombreCliente = "";
-$apellidoCliente = "";
-$nombreEmpleado = "";
-$apellidoEmpleado = "";
-$tractoresDisponibles = [];
-$totalAlquiler = 0.00;
-$mensajeError = "";
-$mensajeAlquiler = "";
-
-
-// Función para realizar un alquiler y calcular el total del alquiler
-function realizarAlquiler($db, $clienteID, $empleadoID, $tractorID, $fechaInicio, $fechaFin, $precioPorDia, $cantidad) {
-    try {
-        // Calcular días de alquiler
-        $inicio = new DateTime($fechaInicio);
-        $fin = new DateTime($fechaFin);
-        $diferencia = $inicio->diff($fin);
-        $diasAlquiler = $diferencia->days + 1; // Sumar 1 para incluir el último día
-
-        // Calcular total de alquiler
-        $totalAlquiler = $diasAlquiler * $precioPorDia * $cantidad;
-
-        // Iniciar transacción
-        $db->beginTransaction();
-
-        // Insertar en tabla DetallesAlquiler
-        $queryAlquiler = $db->prepare("
-            INSERT INTO DetallesAlquiler (AlquilerID, TractorID, PrecioUnitario, Cantidad)
-            VALUES (?, ?, ?, ?)
-            RETURNING DetalleAlquilerID
-        ");
-        $queryAlquiler->execute([$alquilerID, $tractorID, $precioPorDia, $cantidad]);
-
-        $detalleAlquilerID = $queryAlquiler->fetchColumn();
-
-        // Confirmar transacción
-        $db->commit();
-        
-        return $detalleAlquilerID; // Devolver el ID del detalle de alquiler para su uso posterior
-    } catch (PDOException $e) {
-        // Revertir transacción en caso de error
-        $db->rollBack();
-        throw $e;
-    }
-}
-
-// Función para obtener el ID, nombre y apellido por cédula de cliente
-function obtenerClientePorCedula($db, $cedula) {
-    $query = $db->prepare("SELECT ClienteID, Nombre, Apellido FROM Clientes WHERE Cedula = ?");
-    $query->execute([$cedula]);
-    return $query->fetch(PDO::FETCH_ASSOC);
-}
-
-// Función para obtener el ID, nombre y apellido por cédula de empleado
-function obtenerEmpleadoPorCedula($db, $cedula) {
-    $query = $db->prepare("SELECT EmpleadoID, Nombre, Apellido FROM Empleados WHERE Cedula = ?");
-    $query->execute([$cedula]);
-    return $query->fetch(PDO::FETCH_ASSOC);
 }
 
 // Función para obtener tractores disponibles con modelo y marca
@@ -171,32 +151,36 @@ function obtenerTractoresDisponibles($db) {
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
 }
-
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concesionario de Tractores - Realizar Alquiler</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container mt-5">
-    <h2>Realizar Nuevo Alquiler</h2>
-    <?php if ($mensajeError): ?>
+<div class="container">
+    <h2 class="mb-4">Realizar Nuevo Alquiler</h2>
+    <?php if (!empty($mensajeError)): ?>
         <div class="alert alert-danger"><?php echo htmlspecialchars($mensajeError); ?></div>
     <?php endif; ?>
-    <?php if ($mensajeAlquiler): ?>
+    <?php if (!empty($mensajeAlquiler)): ?>
         <div class="alert alert-success"><?php echo htmlspecialchars($mensajeAlquiler); ?></div>
     <?php endif; ?>
     <form method="post" action="">
         <div class="form-group">
             <label for="buscarCedulaCliente">Cédula del Cliente:</label>
-            <input type="text" class="form-control" id="buscarCedulaCliente" name="buscarCedulaCliente" placeholder="Ingrese la cédula del cliente" value="<?php echo isset($buscarCedulaCliente) ? htmlspecialchars($buscarCedulaCliente) : ''; ?>">
+            <input type="text" class="form-control" id="buscarCedulaCliente" name="buscarCedulaCliente" placeholder="Ingrese la cédula del cliente" value="<?php echo isset($_POST['buscarCedulaCliente']) ? htmlspecialchars($_POST['buscarCedulaCliente']) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="nombreCliente">Nombre Cliente:</label>
@@ -206,10 +190,9 @@ function obtenerTractoresDisponibles($db) {
             <label for="apellidoCliente">Apellido Cliente:</label>
             <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" value="<?php echo htmlspecialchars($apellidoCliente); ?>" readonly>
         </div>
-       
         <div class="form-group">
             <label for="buscarCedulaEmpleado">Cédula del Empleado:</label>
-            <input type="text" class="form-control" id="buscarCedulaEmpleado" name="buscarCedulaEmpleado" placeholder="Ingrese la cédula del empleado" value="<?php echo isset($buscarCedulaEmpleado) ? htmlspecialchars($buscarCedulaEmpleado) : ''; ?>">
+            <input type="text" class="form-control" id="buscarCedulaEmpleado" name="buscarCedulaEmpleado" placeholder="Ingrese la cédula del empleado" value="<?php echo isset($_POST['buscarCedulaEmpleado']) ? htmlspecialchars($_POST['buscarCedulaEmpleado']) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="nombreEmpleado">Nombre Empleado:</label>
@@ -219,13 +202,12 @@ function obtenerTractoresDisponibles($db) {
             <label for="apellidoEmpleado">Apellido Empleado:</label>
             <input type="text" class="form-control" id="apellidoEmpleado" name="apellidoEmpleado" value="<?php echo htmlspecialchars($apellidoEmpleado); ?>" readonly>
         </div>
-        <hr> <!-- Separador para claridad -->
         <div class="form-group">
             <label for="idTractorSeleccionado">Seleccionar Tractor:</label>
             <select class="form-control" id="idTractorSeleccionado" name="idTractorSeleccionado">
                 <option value="">Seleccione un tractor...</option>
                 <?php foreach ($tractoresDisponibles as $tractor): ?>
-                    <option value="<?php echo $tractor['tractorid']; ?>" <?php echo isset($idTractorSeleccionado) && $idTractorSeleccionado == $tractor['tractorid'] ? 'selected' : ''; ?>>
+                    <option value="<?php echo $tractor['tractorid']; ?>" <?php echo isset($_POST['idTractorSeleccionado']) && $_POST['idTractorSeleccionado'] == $tractor['tractorid'] ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($tractor['marca'] . ' ' . $tractor['modelo']); ?>
                     </option>
                 <?php endforeach; ?>
@@ -233,19 +215,19 @@ function obtenerTractoresDisponibles($db) {
         </div>
         <div class="form-group">
             <label for="fechaInicio">Fecha de Inicio:</label>
-            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" value="<?php echo isset($fechaInicio) ? htmlspecialchars($fechaInicio) : ''; ?>">
+            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" value="<?php echo isset($_POST['fechaInicio']) ? htmlspecialchars($_POST['fechaInicio']) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="fechaFin">Fecha de Fin:</label>
-            <input type="date" class="form-control" id="fechaFin" name="fechaFin" value="<?php echo isset($fechaFin) ? htmlspecialchars($fechaFin) : ''; ?>">
-        </div>
-        <div class="form-group">
-            <label for="precioPorDia">Precio Unitario por Día:</label>
-            <input type="number" class="form-control" id="precioPorDia" name="precioPorDia" min="0" step="0.01" value="<?php echo isset($precioPorDia) ? htmlspecialchars($precioPorDia) : ''; ?>">
+            <input type="date" class="form-control" id="fechaFin" name="fechaFin" value="<?php echo isset($_POST['fechaFin']) ? htmlspecialchars($_POST['fechaFin']) : ''; ?>">
         </div>
         <div class="form-group">
             <label for="cantidad">Cantidad de Tractores:</label>
-            <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" value="1">
+            <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" value="<?php echo htmlspecialchars($cantidad); ?>">
+        </div>
+        <div class="form-group">
+            <label for="precioPorDia">Precio por Día:</label>
+            <input type="number" step="0.01" class="form-control" id="precioPorDia" name="precioPorDia" value="<?php echo htmlspecialchars($precioPorDia); ?>">
         </div>
         <div class="form-group">
             <label for="totalAlquiler">Total Alquiler:</label>
@@ -255,9 +237,41 @@ function obtenerTractoresDisponibles($db) {
     </form>
 </div>
 
+<script>
+    // Función para calcular y actualizar el total de alquiler
+    function actualizarTotalAlquiler() {
+        var fechaInicio = document.getElementById("fechaInicio").value;
+        var fechaFin = document.getElementById("fechaFin").value;
+        var precioPorDia = parseFloat(document.getElementById("precioPorDia").value);
+        var cantidad = parseInt(document.getElementById("cantidad").value);
+
+        if (fechaInicio && fechaFin && precioPorDia && cantidad) {
+            var inicio = new Date(fechaInicio);
+            var fin = new Date(fechaFin);
+            var diferencia = (fin.getTime() - inicio.getTime()) / (1000 * 3600 * 24); // Diferencia en días
+
+            if (diferencia >= 0) {
+                var diasAlquiler = Math.floor(diferencia) + 1; // Sumar 1 para incluir el último día
+                var totalAlquiler = diasAlquiler * precioPorDia * cantidad;
+                document.getElementById("totalAlquiler").value = totalAlquiler.toFixed(2);
+            } else {
+                alert("La fecha de fin debe ser posterior o igual a la fecha de inicio.");
+            }
+        }
+    }
+
+    // Event listeners para los cambios relevantes
+    document.getElementById("fechaInicio").addEventListener("change", actualizarTotalAlquiler);
+    document.getElementById("fechaFin").addEventListener("change", actualizarTotalAlquiler);
+    document.getElementById("precioPorDia").addEventListener("change", actualizarTotalAlquiler);
+    document.getElementById("cantidad").addEventListener("change", actualizarTotalAlquiler);
+
+    // Llamar a la función inicialmente para calcular el total si hay datos previos
+    actualizarTotalAlquiler();
+</script>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
 </body>
 </html>
