@@ -165,11 +165,63 @@ function obtenerTractoresDisponibles($db) {
             max-width: 600px;
             margin-top: 50px;
         }
-    </style>
+        
+    /* Estilo personalizado */
+    body {
+      padding-top: 56px; /* Ajusta el contenido para evitar que se superponga al nav */
+      overflow-x: hidden; /* Evita la barra de desplazamiento horizontal */
+    }
+    .sidenav {
+      height: 100%;
+      width: 200px;
+      position: fixed;
+      z-index: 1;
+      top: 0;
+      left: 0; /* Menú visible por defecto */
+      background-color: #f8f9fa;
+      padding-top: 20px;
+    }
+    .sidenav a {
+      padding: 10px 15px;
+      text-decoration: none;
+      font-size: 18px;
+      color: #343a40;
+      display: block;
+    }
+    .sidenav a:hover {
+      background-color: #dee2e6; /* Cambia el color de fondo cuando se pasa el mouse sobre los enlaces */
+    }
+    .content {
+      margin-left: 250px; /* Ajusta el margen izquierdo para dejar espacio para el menú */
+    }
+     /* Estilo personalizado */
+  .row-with-transition {
+    overflow-x: hidden;
+  }
+  .row-with-transition:hover .row {
+    transform: translateX(-235px); /* Ajusta el desplazamiento según tus necesidades */
+  }
+  .row {
+    transition: transform 0.4s ease; /* Agrega una transición suave al desplazamiento */
+  }
+  </style>
 </head>
 <body>
 
-<div class="container">
+<div class="sidenav" id="mySidenav">
+        <a href="index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
+        <a href="Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
+        <a href="Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
+        <a href="Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
+        <a href="tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
+        <a href="Form_Ventas/ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
+        <a href="alquiler.php"><i class="fas fa-calendar-alt mr-2"></i> Alquileres</a>
+        <a href="Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
+        <a href="pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
+        <a href="inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
+    </div>
+
+    <div class="container">
     <h2 class="mb-4">Realizar Nuevo Alquiler</h2>
     <?php if (!empty($mensajeError)): ?>
         <div class="alert alert-danger"><?php echo htmlspecialchars($mensajeError); ?></div>
@@ -178,64 +230,85 @@ function obtenerTractoresDisponibles($db) {
         <div class="alert alert-success"><?php echo htmlspecialchars($mensajeAlquiler); ?></div>
     <?php endif; ?>
     <form method="post" action="">
-        <div class="form-group">
-            <label for="buscarCedulaCliente">Cédula del Cliente:</label>
-            <input type="text" class="form-control" id="buscarCedulaCliente" name="buscarCedulaCliente" placeholder="Ingrese la cédula del cliente" value="<?php echo isset($_POST['buscarCedulaCliente']) ? htmlspecialchars($_POST['buscarCedulaCliente']) : ''; ?>">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="buscarCedulaCliente">Cédula del Cliente:</label>
+                    <input type="text" class="form-control" id="buscarCedulaCliente" name="buscarCedulaCliente" placeholder="Ingrese la cédula del cliente" value="<?php echo isset($_POST['buscarCedulaCliente']) ? htmlspecialchars($_POST['buscarCedulaCliente']) : ''; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="nombreCliente">Nombre Cliente:</label>
+                    <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" value="<?php echo htmlspecialchars($nombreCliente); ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="apellidoCliente">Apellido Cliente:</label>
+                    <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" value="<?php echo htmlspecialchars($apellidoCliente); ?>" readonly>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="buscarCedulaEmpleado">Cédula del Empleado:</label>
+                    <input type="text" class="form-control" id="buscarCedulaEmpleado" name="buscarCedulaEmpleado" placeholder="Ingrese la cédula del empleado" value="<?php echo isset($_POST['buscarCedulaEmpleado']) ? htmlspecialchars($_POST['buscarCedulaEmpleado']) : ''; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="nombreEmpleado">Nombre Empleado:</label>
+                    <input type="text" class="form-control" id="nombreEmpleado" name="nombreEmpleado" value="<?php echo htmlspecialchars($nombreEmpleado); ?>" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="apellidoEmpleado">Apellido Empleado:</label>
+                    <input type="text" class="form-control" id="apellidoEmpleado" name="apellidoEmpleado" value="<?php echo htmlspecialchars($apellidoEmpleado); ?>" readonly>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="idTractorSeleccionado">Seleccionar Tractor:</label>
+                    <select class="form-control" id="idTractorSeleccionado" name="idTractorSeleccionado">
+                        <option value="">Seleccione un tractor...</option>
+                        <?php foreach ($tractoresDisponibles as $tractor): ?>
+                            <option value="<?php echo $tractor['tractorid']; ?>" <?php echo isset($_POST['idTractorSeleccionado']) && $_POST['idTractorSeleccionado'] == $tractor['tractorid'] ? 'selected' : ''; ?>>
+                                <?php echo htmlspecialchars($tractor['marca'] . ' ' . $tractor['modelo']); ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="fechaInicio">Fecha de Inicio:</label>
+                    <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" value="<?php echo isset($_POST['fechaInicio']) ? htmlspecialchars($_POST['fechaInicio']) : ''; ?>">
+                </div>
+                <div class="form-group">
+                    <label for="fechaFin">Fecha de Fin:</label>
+                    <input type="date" class="form-control" id="fechaFin" name="fechaFin" value="<?php echo isset($_POST['fechaFin']) ? htmlspecialchars($_POST['fechaFin']) : ''; ?>">
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="nombreCliente">Nombre Cliente:</label>
-            <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" value="<?php echo htmlspecialchars($nombreCliente); ?>" readonly>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="cantidad">Cantidad de Tractores:</label>
+                    <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" value="<?php echo htmlspecialchars($cantidad); ?>">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="precioPorDia">Precio por Día:</label>
+                    <input type="number" step="0.01" class="form-control" id="precioPorDia" name="precioPorDia" value="<?php echo htmlspecialchars($precioPorDia); ?>">
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="totalAlquiler">Total Alquiler:</label>
+                    <input type="text" class="form-control" id="totalAlquiler" name="totalAlquiler" value="<?php echo htmlspecialchars(number_format($totalAlquiler, 2)); ?>" readonly>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="apellidoCliente">Apellido Cliente:</label>
-            <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" value="<?php echo htmlspecialchars($apellidoCliente); ?>" readonly>
+        <div class="row">
+            <div class="col-md-12">
+                <button type="submit" class="btn btn-primary" name="realizarAlquiler">Realizar Alquiler</button>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="buscarCedulaEmpleado">Cédula del Empleado:</label>
-            <input type="text" class="form-control" id="buscarCedulaEmpleado" name="buscarCedulaEmpleado" placeholder="Ingrese la cédula del empleado" value="<?php echo isset($_POST['buscarCedulaEmpleado']) ? htmlspecialchars($_POST['buscarCedulaEmpleado']) : ''; ?>">
-        </div>
-        <div class="form-group">
-            <label for="nombreEmpleado">Nombre Empleado:</label>
-            <input type="text" class="form-control" id="nombreEmpleado" name="nombreEmpleado" value="<?php echo htmlspecialchars($nombreEmpleado); ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="apellidoEmpleado">Apellido Empleado:</label>
-            <input type="text" class="form-control" id="apellidoEmpleado" name="apellidoEmpleado" value="<?php echo htmlspecialchars($apellidoEmpleado); ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="idTractorSeleccionado">Seleccionar Tractor:</label>
-            <select class="form-control" id="idTractorSeleccionado" name="idTractorSeleccionado">
-                <option value="">Seleccione un tractor...</option>
-                <?php foreach ($tractoresDisponibles as $tractor): ?>
-                    <option value="<?php echo $tractor['tractorid']; ?>" <?php echo isset($_POST['idTractorSeleccionado']) && $_POST['idTractorSeleccionado'] == $tractor['tractorid'] ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($tractor['marca'] . ' ' . $tractor['modelo']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="fechaInicio">Fecha de Inicio:</label>
-            <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" value="<?php echo isset($_POST['fechaInicio']) ? htmlspecialchars($_POST['fechaInicio']) : ''; ?>">
-        </div>
-        <div class="form-group">
-            <label for="fechaFin">Fecha de Fin:</label>
-            <input type="date" class="form-control" id="fechaFin" name="fechaFin" value="<?php echo isset($_POST['fechaFin']) ? htmlspecialchars($_POST['fechaFin']) : ''; ?>">
-        </div>
-        <div class="form-group">
-            <label for="cantidad">Cantidad de Tractores:</label>
-            <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" value="<?php echo htmlspecialchars($cantidad); ?>">
-        </div>
-        <div class="form-group">
-            <label for="precioPorDia">Precio por Día:</label>
-            <input type="number" step="0.01" class="form-control" id="precioPorDia" name="precioPorDia" value="<?php echo htmlspecialchars($precioPorDia); ?>">
-        </div>
-        <div class="form-group">
-            <label for="totalAlquiler">Total Alquiler:</label>
-            <input type="text" class="form-control" id="totalAlquiler" name="totalAlquiler" value="<?php echo htmlspecialchars(number_format($totalAlquiler, 2)); ?>" readonly>
-        </div>
-        <button type="submit" class="btn btn-primary" name="realizarAlquiler">Realizar Alquiler</button>
     </form>
 </div>
+
 
 <script>
     // Función para calcular y actualizar el total de alquiler

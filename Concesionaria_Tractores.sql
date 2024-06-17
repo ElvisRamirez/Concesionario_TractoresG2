@@ -1,9 +1,6 @@
 USE DATABASE  Concesionario_Tractores
 
-select * from DetallesAlquiler
-select * from Alquileres
-select * from ModelosTractores
-	select * from DetallesVenta	
+
 -- Ahora crea las tablas y los índices en la nueva base de datos
 
 CREATE TABLE Clientes (
@@ -15,9 +12,6 @@ CREATE TABLE Clientes (
     Teléfono VARCHAR(20) NOT NULL,
     Email VARCHAR(50) UNIQUE NOT NULL
 );
-
-
-
 
 
 
@@ -34,12 +28,7 @@ CREATE TABLE Empleados (
     Teléfono VARCHAR(20) NOT NULL,
     Email VARCHAR(50) UNIQUE NOT NULL
 );
--- Agregar el campo Cedula a la tabla Empleados
-ALTER TABLE Empleados
-ADD COLUMN Cedula VARCHAR(10) UNIQUE NOT NULL;
-DELETE FROM Empleados 
 
-select * from Empleados
 
 CREATE INDEX idx_empleados_puesto ON Empleados(Puesto);
 CREATE INDEX idx_empleados_email ON Empleados(Email);
@@ -132,22 +121,6 @@ CREATE TABLE DetallesAlquiler (
 CREATE INDEX idx_detalles_alquiler_alquiler_id ON DetallesAlquiler(AlquilerID);
 CREATE INDEX idx_detalles_alquiler_tractor_id ON DetallesAlquiler(TractorID);
 
-CREATE TABLE Servicios (
-    ServicioID SERIAL PRIMARY KEY,
-    Descripción TEXT NOT NULL,
-    Costo DECIMAL(10, 2) NOT NULL CHECK (Costo >= 0)
-);
-
-CREATE TABLE Mantenimiento (
-    MantenimientoID SERIAL PRIMARY KEY,
-    TractorID INT NOT NULL,
-    FechaMantenimiento DATE NOT NULL,
-    ServicioID INT NOT NULL,
-    Descripción TEXT NOT NULL,
-    Costo DECIMAL(10, 2) NOT NULL CHECK (Costo >= 0),
-    FOREIGN KEY (TractorID) REFERENCES Tractores(TractorID),
-    FOREIGN KEY (ServicioID) REFERENCES Servicios(ServicioID)
-);
 
 
 CREATE TABLE Facturas (
@@ -173,7 +146,7 @@ CREATE TABLE DetallesFactura (
 );
 
 CREATE INDEX idx_detalles_factura_factura_id ON DetallesFactura(FacturaID);
-
+select * from Pagos
 CREATE TABLE Pagos (
     PagoID SERIAL PRIMARY KEY,
     FacturaID INT NOT NULL,
@@ -200,16 +173,4 @@ CREATE TABLE Inventario (
 
 CREATE INDEX idx_inventario_tractor_id ON Inventario(TractorID);
 CREATE INDEX idx_inventario_proveedor_id ON Inventario(ProveedorID);
-
-SELECT t.Imagen, mt.Marca, mt.Modelo, t.Año, t.Estado, mt.Descripción AS DescripciónTractor
-            FROM Tractores t
-            INNER JOIN ModelosTractores mt ON t.ModeloID = mt.ModeloID
-            INNER JOIN Inventario i ON t.TractorID = i.TractorID
-            ORDER BY i.FechaIngreso DESC
-            LIMIT 3;
-
-SELECT df.DetalleVentaID, df.VentaID, df.TractorID, df.PrecioUnitario, df.Cantidad,
-       t.TractorID, t.ModeloID, t.Estado
-FROM DetallesVenta df
-INNER JOIN Tractores t ON df.TractorID = t.TractorID;
 

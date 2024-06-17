@@ -107,7 +107,7 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
     <style>
         /* Estilo personalizado */
         body {
-            padding-left: 20%;
+           
             padding-top: 0px; /* Ajusta el contenido para evitar que se superponga al nav */
             overflow-x: hidden; /* Evita la barra de desplazamiento horizontal */
         }
