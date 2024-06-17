@@ -1,39 +1,39 @@
 <?php
-// Conexión a la base de datos
 $dbHost = 'localhost';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
 
 try {
+    // Establecer conexión PDO
     $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Consulta SQL para obtener datos de pagos con detalles de factura
+    $sql = "SELECT
+                p.pagoid,
+                p.facturaid,
+                p.formapago,
+                p.fechapago,
+                p.montopago,
+                f.fechafactura,
+                f.totalfactura,
+                df.descripcion AS descripciondetalle,
+                df.preciounitario AS preciounitariodetalle,
+                df.cantidad AS cantidaddetalle
+            FROM Pagos p
+            INNER JOIN Facturas f ON p.facturaid = f.facturaid
+            LEFT JOIN DetallesFactura df ON f.facturaid = df.facturaid";
+
+    // Preparar y ejecutar la consulta
+    $stmt = $db->query($sql);
+    $pagos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
     die("Error al conectar a la base de datos: " . $e->getMessage());
 }
-
-// Incluir el archivo de conexión a la base de datos
-
-// Consulta SQL para obtener los pagos con información del cliente
-$query = "SELECT
-            p.PagoID,
-            p.FacturaID,
-            p.FormaPago,
-            p.FechaPago,
-            p.MontoPago,
-            c.Nombre AS NombreCliente,
-            c.Apellido AS ApellidoCliente
-          FROM Pagos p
-          INNER JOIN Facturas f ON p.FacturaID = f.FacturaID
-          INNER JOIN Clientes c ON f.ClienteID = c.ClienteID";
-
-try {
-    $statement = $db->query($query);
-    $pagos = $statement->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Error al ejecutar la consulta: " . $e->getMessage());
-}
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -42,16 +42,23 @@ try {
     <title>Lista de Pagos</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        .img-thumbnail {
-            max-width: 100px;
-            height: auto;
+        /* Estilo adicional opcional para la tabla */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px; /* Espacio superior */
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <div class="container mt-5">
-        <h1 class="text-center mb-5">Lista de Pagos</h1>
-        <table class="table table-bordered">
+    <div class="container">
+        <h2 class="mt-4 mb-4">Lista de Pagos</h2>
+        <table class="table table-bordered table-striped">
             <thead class="thead-dark">
                 <tr>
                     <th>Pago ID</th>
@@ -59,27 +66,33 @@ try {
                     <th>Forma de Pago</th>
                     <th>Fecha de Pago</th>
                     <th>Monto de Pago</th>
-                    <th>Nombre Cliente</th>
-                    <th>Apellido Cliente</th>
+                    <th>Fecha de Factura</th>
+                    <th>Total Factura</th>
+                    <th>Descripción Detalle</th>
+                    <th>Precio Unitario Detalle</th>
+                    <th>Cantidad Detalle</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($pagos as $pago): ?>
                     <tr>
-                        <td><?php echo isset($pago['PagoID']) ? htmlspecialchars($pago['PagoID']) : ''; ?></td>
-                        <td><?php echo isset($pago['FacturaID']) ? htmlspecialchars($pago['FacturaID']) : ''; ?></td>
-                        <td><?php echo isset($pago['FormaPago']) ? htmlspecialchars($pago['FormaPago']) : ''; ?></td>
-                        <td><?php echo isset($pago['FechaPago']) ? htmlspecialchars($pago['FechaPago']) : ''; ?></td>
-                        <td><?php echo isset($pago['MontoPago']) ? htmlspecialchars($pago['MontoPago']) : ''; ?></td>
-                        <td><?php echo isset($pago['NombreCliente']) ? htmlspecialchars($pago['NombreCliente']) : ''; ?></td>
-                        <td><?php echo isset($pago['ApellidoCliente']) ? htmlspecialchars($pago['ApellidoCliente']) : ''; ?></td>
+                        <td><?php echo isset($pago['pagoid']) ? htmlspecialchars($pago['pagoid']) : ''; ?></td>
+                        <td><?php echo isset($pago['facturaid']) ? htmlspecialchars($pago['facturaid']) : ''; ?></td>
+                        <td><?php echo isset($pago['formapago']) ? htmlspecialchars($pago['formapago']) : ''; ?></td>
+                        <td><?php echo isset($pago['fechapago']) ? htmlspecialchars($pago['fechapago']) : ''; ?></td>
+                        <td><?php echo isset($pago['montopago']) ? htmlspecialchars($pago['montopago']) : ''; ?></td>
+                        <td><?php echo isset($pago['fechafactura']) ? htmlspecialchars($pago['fechafactura']) : ''; ?></td>
+                        <td><?php echo isset($pago['totalfactura']) ? htmlspecialchars($pago['totalfactura']) : ''; ?></td>
+                        <td><?php echo isset($pago['descripciondetalle']) ? htmlspecialchars($pago['descripciondetalle']) : ''; ?></td>
+                        <td><?php echo isset($pago['preciounitariodetalle']) ? htmlspecialchars($pago['preciounitariodetalle']) : ''; ?></td>
+                        <td><?php echo isset($pago['cantidaddetalle']) ? htmlspecialchars($pago['cantidaddetalle']) : ''; ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
 
-    <!-- Scripts de Bootstrap -->
+    <!-- Scripts de Bootstrap (jQuery y Popper.js necesarios para Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
