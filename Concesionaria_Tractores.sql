@@ -48,7 +48,7 @@ CREATE TABLE ModelosTractores (
     ModeloID SERIAL PRIMARY KEY,
     Marca VARCHAR(50) NOT NULL,
     Modelo VARCHAR(50) NOT NULL,
-    Descripción TEXT
+    Descripcion TEXT
 );
 
 CREATE INDEX idx_modelos_tractores_marca ON ModelosTractores(Marca);
@@ -139,7 +139,7 @@ CREATE INDEX idx_facturas_empleado_id ON Facturas(EmpleadoID);
 CREATE TABLE DetallesFactura (
     DetalleFacturaID SERIAL PRIMARY KEY,
     FacturaID INT NOT NULL,
-    Descripción TEXT NOT NULL,
+    Descripcion TEXT NOT NULL,
     PrecioUnitario DECIMAL(10, 2) NOT NULL CHECK (PrecioUnitario >= 0),
     Cantidad INT NOT NULL CHECK (Cantidad > 0),
     FOREIGN KEY (FacturaID) REFERENCES Facturas(FacturaID)
