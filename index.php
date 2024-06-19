@@ -1,5 +1,5 @@
 <?php
-$dbHost = 'localhost';
+$dbHost = '10.241.0.48';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -8,7 +8,7 @@ try {
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     // Consulta SQL para obtener los últimos tractores disponibles
-    $sql = "SELECT t.Imagen, mt.Marca, mt.Modelo, t.Año, t.Estado, mt.Descripción AS DescripciónTractor
+    $sql = "SELECT t.Imagen, mt.Marca, mt.Modelo, t.Año, t.Estado, mt.Descripcion AS DescripcionTractor
             FROM Tractores t
             INNER JOIN ModelosTractores mt ON t.ModeloID = mt.ModeloID
             WHERE t.Estado = 'disponible'

@@ -1,6 +1,6 @@
 <?php
 // Conexión a la base de datos
-$dbHost = 'localhost';
+$dbHost = '10.241.0.48';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
