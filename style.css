@@ -25,7 +25,7 @@ body {
     background-size: cover;
     font-family: Poppins;
     color: #000000;
-    animation: rotate 5s infinite alternate linear;
+    animation: rotate 3s infinite alternate linear;
 }
 .wrapper {
     display: flex;

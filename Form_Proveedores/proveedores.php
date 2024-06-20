@@ -89,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <style>
     /* Estilo personalizado */
     body {
-        padding-left: 12%;
+        padding-left: 15%;
         overflow-x: hidden;
     }
     .sidenav {
@@ -194,7 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <div class="container
-mt-4 ">
+mt-3 ">
     <h2 class="text-shadow text-white">Lista de Proveedores</h2>
     <?php
     $proveedores = obtenerProveedores($db);
