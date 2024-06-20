@@ -1,7 +1,8 @@
 <?php
 // Conexión a la base de datos
+$dbHost = '10.241.0.57';
 //$dbHost = '10.241.0.48';
-$dbHost = '192.168.10.10';
+//$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -20,13 +21,13 @@ function obtenerEmpleados($db) {
 }
 
 // Función para generar enlace de edición
-function generarEnlaceEditar($empleados) {
-    return "<a href='/Form_Empleado/editar.php?id=$empleados'><i class='fas fa-edit'></i> Editar</a>";
+function generarEnlaceEditar($empleadoID) {
+    return "<a href='Form_Empleado/editar.php?id=$empleadoID'><i class='fas fa-edit'></i> Editar</a>";
 }
 
 // Función para generar enlace de eliminación
-function generarEnlaceEliminar($empleados) {
-    return "<a href='/Form_Empleado/eliminar.php?id=$empleados' onclick='return confirm(\"¿Estás seguro de eliminar este cliente?\")'><i class='fas fa-trash'></i> Eliminar</a>";
+function generarEnlaceEliminar($empleadoID) {
+    return "<a href='eliminar.php?id=$empleadoID' onclick='return confirm(\"¿Estás seguro de eliminar este empleado?\")'><i class='fas fa-trash'></i> Eliminar</a>";
 }
 
 // Mostrar tabla de empleados
@@ -138,6 +139,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   .row {
     transition: transform 0.4s ease; /* Agrega una transición suave al desplazamiento */
   }
+  .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .bg-brown {
+    background-color: #8B4513; /* Color café */
+   
+}
+.btn-custom {
+    background-color: #ff9800; /* Naranja */
+    border-color: #ff9800;
+    color: white;
+    border-radius: 25px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+.btn-custom:hover {
+    background-color: #e68900; /* Naranja oscuro */
+    border-color: #e68900;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
   </style>
 </head>
 <body>
@@ -157,7 +181,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="card">
     <div class="card-body">
         <div class="container">
-            <h3 class="card-title text-center">Agregar Nuevo Empleado</h3>
+            <h3 class="card-title text-center text-shadow">Agregar Nuevo Empleado</h3>
             <form method="post">
                 <div class="form-group">
                     <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
@@ -177,7 +201,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-group">
                     <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
                 </div>
-                <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Empleado</button>
+                <button type="submit" class="btn btn-custom"><i class="fas fa-plus"></i> Agregar Empleado</button>
             </form>
         </div>
     </div>
@@ -185,7 +209,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
     <div class="container mt-4">
-        <h2>Lista de Empleados</h2>
+        <h2 class="text-shadow text-white" >Lista de Empleados</h2>
         <?php
         $empleados = obtenerEmpleados($db);
         mostrarEmpleados($empleados);

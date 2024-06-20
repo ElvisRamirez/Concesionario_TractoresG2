@@ -1,7 +1,8 @@
 <?php
 // Conexión a la base de datos
+$dbHost = '10.241.0.57';
 //$dbHost = '10.241.0.48';
-$dbHost = '192.168.10.10';
+//$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -244,6 +245,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   .row {
     transition: transform 0.4s ease; /* Agrega una transición suave al desplazamiento */
   }
+
+  .bg-brown {
+            background-color: #8B4513; /* Color café */
+           
+        }
+        .btn-custom {
+            background-color: #ff9800; /* Naranja */
+            border-color: #ff9800;
+            color: white;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #e68900; /* Naranja oscuro */
+            border-color: #e68900;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        } 
   </style>
 </head>
 <body>
@@ -265,7 +288,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container mt-5">
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title text-center">Realizar Nueva Venta</h2>
+                <h2 class="card-title text-center text-shadow">Realizar Nueva Venta</h2>
                 <?php if ($mensajeError): ?>
                     <div class="alert alert-danger"><?php echo htmlspecialchars($mensajeError); ?></div>
                 <?php endif; ?>
@@ -328,7 +351,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <label for="totalVenta">Total Venta:</label>
                         <input type="text" class="form-control" id="totalVenta" name="totalVenta" value="<?php echo htmlspecialchars(number_format($totalVenta, 2)); ?>" readonly>
                     </div>
-                    <button type="submit" class="btn btn-primary" name="realizarVenta">Realizar Venta</button>
+                    <button type="submit" class="btn btn-custom" name="realizarVenta">Realizar Venta</button>
                 </form>
             </div>
         </div>

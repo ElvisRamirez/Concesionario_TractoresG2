@@ -18,7 +18,7 @@ body {
 }
 body {
     display: grid;
-    place-items: center;
+  
     margin: 0;
     background-image: url("svg/dragon-scales\ \(3\).svg");
     background-repeat: no-repeat;
@@ -41,11 +41,7 @@ body {
 /* Estilos personalizados */
 
 /* Contenedor principal */
-.content {
-    display: flex;
-    justify-content: center; /* Centrar horizontalmente */
-    align-items: center; /* Centrar verticalmente */
-}
+
 
 /* Tarjeta de formulario */
 .card {
@@ -91,23 +87,4 @@ body {
 /* Encabezado */
 h2 {
     margin-bottom: 5px;
-}
-
-.bg-brown {
-    background-color: #8B4513; /* Color café */
-   
-}
-.btn-custom {
-    background-color: #ff9800; /* Naranja */
-    border-color: #ff9800;
-    color: white;
-    border-radius: 25px;
-    padding: 10px 20px;
-    transition: all 0.3s ease;
-}
-.btn-custom:hover {
-    background-color: #e68900; /* Naranja oscuro */
-    border-color: #e68900;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    transform: translateY(-2px);
 }

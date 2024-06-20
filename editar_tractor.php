@@ -1,7 +1,8 @@
 <?php
 // Conexión a la base de datos (misma configuración que tractor.php)
+$dbHost = '10.241.0.57';
 //$dbHost = '10.241.0.48';
-$dbHost = '192.168.10.10';
+//$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';

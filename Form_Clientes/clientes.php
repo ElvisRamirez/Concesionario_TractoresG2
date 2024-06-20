@@ -1,7 +1,8 @@
 <?php
 // Conexión a la base de datos
+$dbHost = '10.241.0.57';
 //$dbHost = '10.241.0.48';
-$dbHost = '192.168.10.10';
+//$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -130,7 +131,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   .row {
     transition: transform 0.4s ease; /* Agrega una transición suave al desplazamiento */
   }
-        
+  .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        } 
+        .bg-brown {
+            background-color: #8B4513; /* Color café */
+           
+        }
+        .btn-custom {
+            background-color: #ff9800; /* Naranja */
+            border-color: #ff9800;
+            color: white;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+        .btn-custom:hover {
+            background-color: #e68900; /* Naranja oscuro */
+            border-color: #e68900;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -153,7 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="card">
         <div class="card-body">
             <div class="container">
-                <h3 class="card-title text-center">Agregar Nuevo Cliente</h3>
+                <h3 class="card-title text-center text-shadow">Agregar Nuevo Cliente</h3>
                 <form method="post">
                     <div class="form-group">
                         <input type="text" class="form-control" id="nombre" placeholder="Nombre" required>
@@ -173,7 +194,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <div class="form-group">
                         <input type="email" class="form-control" id="email" placeholder="Email" name="email" required>
                     </div>
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Cliente</button>
+                    <button type="submit" class="btn btn-custom"><i class="fas fa-plus"></i> Agregar Cliente</button>
                 </form>
             </div>
         </div>
@@ -182,7 +203,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 <div class="container ">
-    <h2>Lista de Clientes</h2>
+    <h2 class="text-shadow text-white"  >Lista de Clientes</h2>
     <?php
     $clientes = obtenerClientes($db);
     mostrarClientes($clientes);

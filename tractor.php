@@ -1,7 +1,8 @@
 <?php
 // Conexión a la base de datos
+$dbHost = '10.241.0.57';
 //$dbHost = '10.241.0.48';
-$dbHost = '192.168.10.10';
+//$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -103,6 +104,7 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concesionario de Tractores</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -139,6 +141,32 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
             width: 100px; /* Ajusta el tamaño de las imágenes en la tabla */
             height: auto; /* Mantén la proporción de la imagen */
         }
+        .text-shadow {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        .text-shadow1 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 3);
+        }
+
+        .bg-brown {
+            background-color: #8B4513; /* Color café */
+           
+        }
+        .btn-custom {
+            background-color: #ff9800; /* Naranja */
+            border-color: #ff9800;
+            color: white;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+            width: 200px;
+        }
+        .btn-custom:hover {
+            background-color: #e68900; /* Naranja oscuro */
+            border-color: #e68900;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -160,9 +188,9 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
     <div class="container mt-3 text-right">
     <a href="nuevo_modelo_tractor.php" class="btn btn-success"><i class="fas fa-plus"></i> Nuevo Modelo de Tractor</a>
 </div>
-    <h1>Concesionario de Tractores</h1>
+    <h1 class="text-white text-shadow1" >Concesionario de Tractores</h1>
     
-    <h2>Agregar Nuevo Tractor</h2>
+    <h2 class="text-white text-shadow" >Agregar Nuevo Tractor</h2>
     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
         <input type="hidden" name="agregarTractor" value="1">
         
@@ -247,7 +275,7 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
             </div>
         </div>
         
-        <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Tractor</button>
+        <button type="submit" class="btn btn-custom"><i class="fas fa-plus"></i> Agregar Tractor</button>
     </form>
 
     

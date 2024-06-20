@@ -1,6 +1,7 @@
 <?php
+$dbHost = '10.241.0.57';
 //$dbHost = '10.241.0.48';
-$dbHost = '192.168.10.10';
+//$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -73,6 +74,14 @@ try {
   .row {
     transition: transform 0.4s ease; /* Agrega una transición suave al desplazamiento */
   }
+  .label-highlight {
+            background-color: white;
+            color: black;
+            padding: 0.5em 1em;
+            border-radius: 0.25em;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            width: 25pc;
+        }
   </style>
 </head>
 <body>
@@ -91,8 +100,8 @@ try {
     </div>
 <div class="container-fluid content">
   <div class="presentation">
-    <h2 class="mb-4">Bienvenido al Concesionario de Tractores</h2>
-    <p class="mb-4">Somos líderes en la venta y servicio de tractores agrícolas.</p>
+    <h2 class="mb-4 ">Bienvenido al Concesionario de Tractores</h2>
+    <p class="mb-4 ">Somos líderes en la venta y servicio de tractores agrícolas.</p>
     <p class="mb-4">Contamos con una amplia gama de tractores de las mejores marcas del mercado.</p>
     <p class="mb-4">Nuestro equipo de expertos está listo para ayudarte a encontrar el tractor perfecto para tus necesidades.</p>
     <p class="mb-4">Visítanos hoy y descubre cómo podemos ayudarte a potenciar tu trabajo en el campo.</p>
@@ -125,10 +134,10 @@ try {
   <div class="mt-5">
     <h2 class="mb-4">Servicios</h2>
     <ul class="list-unstyled">
-      <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i>Venta de tractores nuevos y usados.</li>
-      <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i>Servicio de mantenimiento y reparación.</li>
-      <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i>Asesoramiento técnico y financiero.</li>
-      <li class="mb-2"><i class="fas fa-check-circle text-success mr-2"></i>Entrega a domicilio.</li>
+      <li class="mb-2 label-highlight"><i class="fas fa-check-circle text-success mr-2"></i>Venta de tractores nuevos y usados.</li>
+      <li class="mb-2 label-highlight"><i class="fas fa-check-circle text-success mr-2"></i>Servicio de mantenimiento y reparación.</li>
+      <li class="mb-2 label-highlight"><i class="fas fa-check-circle text-success mr-2"></i>Asesoramiento técnico y financiero.</li>
+      <li class="mb-2 label-highlight"><i class="fas fa-check-circle text-success mr-2"></i>Entrega a domicilio.</li>
     </ul>
   </div>
 </div>
