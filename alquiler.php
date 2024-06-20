@@ -160,6 +160,7 @@ function obtenerTractoresDisponibles($db) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concesionario de Tractores - Realizar Alquiler</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -206,6 +207,34 @@ function obtenerTractoresDisponibles($db) {
   .row {
     transition: transform 0.4s ease; /* Agrega una transición suave al desplazamiento */
   }
+  .bg-brown {
+    background-color: #8B4513; /* Color café */
+   
+}
+
+
+
+.btn-custom {
+    background-color: #ff9800; /* Naranja */
+    border-color: #ff9800;
+    color: white;
+    border-radius: 25px;
+    padding: 10px 20px;
+    transition: all 0.3s ease;
+}
+.btn-custom:hover {
+    background-color: #e68900; /* Naranja oscuro */
+    border-color: #e68900;
+    box-shadow: 2 5px 10px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+.text-shadow {
+    color: black;
+    text-shadow: 0 4px 8px rgba(255, 255, 255, 2);
+}
+.text-shadow1 {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
   </style>
 </head>
 <body>
@@ -224,7 +253,7 @@ function obtenerTractoresDisponibles($db) {
     </div>
 
     <div class="container">
-    <h2 class="mb-4">Realizar Nuevo Alquiler</h2>
+    <h2 class="mb-4 text-white text-shadow1">Realizar Nuevo Alquiler</h2>
     <?php if (!empty($mensajeError)): ?>
         <div class="alert alert-danger"><?php echo htmlspecialchars($mensajeError); ?></div>
     <?php endif; ?>
@@ -233,37 +262,37 @@ function obtenerTractoresDisponibles($db) {
     <?php endif; ?>
     <form method="post" action="">
         <div class="row">
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="buscarCedulaCliente">Cédula del Cliente:</label>
+            <div class="col-md-4 ">
+                <div class="form-group ">
+                    <label for="buscarCedulaCliente" class="text-shadow">Cédula del Cliente:</label>
                     <input type="text" class="form-control" id="buscarCedulaCliente" name="buscarCedulaCliente" placeholder="Ingrese la cédula del cliente" value="<?php echo isset($_POST['buscarCedulaCliente']) ? htmlspecialchars($_POST['buscarCedulaCliente']) : ''; ?>">
                 </div>
                 <div class="form-group">
-                    <label for="nombreCliente">Nombre Cliente:</label>
+                    <label for="nombreCliente" class="text-shadow">Nombre Cliente:</label>
                     <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" value="<?php echo htmlspecialchars($nombreCliente); ?>" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="apellidoCliente">Apellido Cliente:</label>
+                    <label for="apellidoCliente" class="text-shadow">Apellido Cliente:</label>
                     <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" value="<?php echo htmlspecialchars($apellidoCliente); ?>" readonly>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="buscarCedulaEmpleado">Cédula del Empleado:</label>
+                    <label for="buscarCedulaEmpleado" class="text-shadow">Cédula del Empleado:</label>
                     <input type="text" class="form-control" id="buscarCedulaEmpleado" name="buscarCedulaEmpleado" placeholder="Ingrese la cédula del empleado" value="<?php echo isset($_POST['buscarCedulaEmpleado']) ? htmlspecialchars($_POST['buscarCedulaEmpleado']) : ''; ?>">
                 </div>
                 <div class="form-group">
-                    <label for="nombreEmpleado">Nombre Empleado:</label>
+                    <label for="nombreEmpleado" class="text-shadow">Nombre Empleado:</label>
                     <input type="text" class="form-control" id="nombreEmpleado" name="nombreEmpleado" value="<?php echo htmlspecialchars($nombreEmpleado); ?>" readonly>
                 </div>
                 <div class="form-group">
-                    <label for="apellidoEmpleado">Apellido Empleado:</label>
+                    <label for="apellidoEmpleado" class="text-shadow">Apellido Empleado:</label>
                     <input type="text" class="form-control" id="apellidoEmpleado" name="apellidoEmpleado" value="<?php echo htmlspecialchars($apellidoEmpleado); ?>" readonly>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="idTractorSeleccionado">Seleccionar Tractor:</label>
+                    <label for="idTractorSeleccionado" class="text-shadow">Seleccionar Tractor:</label>
                     <select class="form-control" id="idTractorSeleccionado" name="idTractorSeleccionado">
                         <option value="">Seleccione un tractor...</option>
                         <?php foreach ($tractoresDisponibles as $tractor): ?>
@@ -274,11 +303,11 @@ function obtenerTractoresDisponibles($db) {
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="fechaInicio">Fecha de Inicio:</label>
+                    <label for="fechaInicio" class="text-shadow">Fecha de Inicio:</label>
                     <input type="date" class="form-control" id="fechaInicio" name="fechaInicio" value="<?php echo isset($_POST['fechaInicio']) ? htmlspecialchars($_POST['fechaInicio']) : ''; ?>">
                 </div>
                 <div class="form-group">
-                    <label for="fechaFin">Fecha de Fin:</label>
+                    <label for="fechaFin" class="text-shadow">Fecha de Fin:</label>
                     <input type="date" class="form-control" id="fechaFin" name="fechaFin" value="<?php echo isset($_POST['fechaFin']) ? htmlspecialchars($_POST['fechaFin']) : ''; ?>">
                 </div>
             </div>
@@ -286,26 +315,26 @@ function obtenerTractoresDisponibles($db) {
         <div class="row">
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="cantidad">Cantidad de Tractores:</label>
+                    <label for="cantidad" class="text-shadow">Cantidad de Tractores:</label>
                     <input type="number" class="form-control" id="cantidad" name="cantidad" min="1" value="<?php echo htmlspecialchars($cantidad); ?>">
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="form-group">
-                    <label for="precioPorDia">Precio por Día:</label>
+                    <label for="precioPorDia" class="text-shadow">Precio por Día:</label>
                     <input type="number" step="0.01" class="form-control" id="precioPorDia" name="precioPorDia" value="<?php echo htmlspecialchars($precioPorDia); ?>">
                 </div>
             </div>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <label for="totalAlquiler">Total Alquiler:</label>
+            <div class="col-md-4 ">
+                <div class="form-group te">
+                    <label for="totalAlquiler " class="text-shadow" >Total Alquiler:</label>
                     <input type="text" class="form-control" id="totalAlquiler" name="totalAlquiler" value="<?php echo htmlspecialchars(number_format($totalAlquiler, 2)); ?>" readonly>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-12">
-                <button type="submit" class="btn btn-primary" name="realizarAlquiler">Realizar Alquiler</button>
+                <button type="submit" class="btn btn-custom" name="realizarAlquiler">Realizar Alquiler</button>
             </div>
         </div>
     </form>
