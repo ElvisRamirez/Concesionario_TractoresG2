@@ -11,12 +11,22 @@ html, body, .wrapper {
         background-position: 0% 50%;
     }
 }
-
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+@media (width >= 500px) {
+    body {
+      padding: 0;
+    }
+  }
 body {
     display: grid;
     place-items: center;
     margin: 0;
-    background-image: url("svg/dragon-scales\ \(1\).svg");
+    background-image: url("svg/dragon-scales\ \(3\).svg");
     background-repeat: no-repeat;
     background-size: cover;
     font-family: Poppins;

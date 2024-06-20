@@ -149,43 +149,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </div>
 
 
-<div class="card">
-    <div class="card-body">
-        <div class="container">
-            <h3 class="card-title text-center">Agregar Nuevo Cliente</h3>
-            <form method="post">
-                <div class="form-group">
-                  
-                    <input type="text" class="form-control" id="nombre"  placeholder="Nombre" required>
-                </div>
-                <div class="form-group">
-                  
-                    <input type="text" class="form-control" id="apellido"  placeholder="Apellido" required>
-                </div>
-                <div class="form-group">
-                  
-                    <input type="text" class="form-control" id="cedula" placeholder="Cédula" name="" required>
-                </div>
-                <div class="form-group">
-                 
-                    <input type="text" class="form-control" id="direccion" placeholder="Dirección" name="direccion">
-                </div>
-                <div class="form-group">
-            
-                    <input type="text" class="form-control" id="telefono"  placeholder="Teléfono" name="telefono" required>
-                </div>
-                <div class="form-group">
-    
-                    <input type="email" class="form-control" id="email"  placeholder="Email" name="email" required>
-                </div>
-                <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Cliente</button>
-            </form>
+<div class="wrapper">
+    <div class="card">
+        <div class="card-body">
+            <div class="container">
+                <h3 class="card-title text-center">Agregar Nuevo Cliente</h3>
+                <form method="post">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="nombre" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="apellido" placeholder="Apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="cedula" placeholder="Cédula" name="" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" name="direccion">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="telefono" placeholder="Teléfono" name="telefono" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" class="form-control" id="email" placeholder="Email" name="email" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Cliente</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
 
-<div class="container mt-4">
+<div class="container ">
     <h2>Lista de Clientes</h2>
     <?php
     $clientes = obtenerClientes($db);

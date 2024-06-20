@@ -1,6 +1,5 @@
 <?php
 // Conexión a la base de datos
-//$dbHost = '10.241.0.48';
 $dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
@@ -13,27 +12,18 @@ try {
     die("Error al conectar a la base de datos: " . $e->getMessage());
 }
 
-// Verificar si se ha enviado un ID válido
-if (!isset($_GET['id']) || empty($_GET['id'])) {
-    die("ID de empleado no proporcionado.");
+// Verificar si se ha pasado el ID del empleado a eliminar
+if (isset($_GET['id'])) {
+    $empleadoID = $_GET['id'];
+
+    // Preparar la consulta de eliminación
+    $query = $db->prepare("DELETE FROM Empleados WHERE empleadoid = ?");
+    $query->execute([$empleadoID]);
+
+    // Redirigir de nuevo a la página de empleados
+    header("Location: empleados.php");
+    exit;
+} else {
+    echo "ID de empleado no especificado.";
 }
-
-$empleadoID = $_GET['id'];
-
-// Verificar si el empleado existe
-$query = $db->prepare("SELECT * FROM Empleados WHERE empleadoid = ?");
-$query->execute([$empleadoID]);
-$empleado = $query->fetch(PDO::FETCH_ASSOC);
-
-if (!$empleado) {
-    die("Empleado no encontrado.");
-}
-
-// Eliminar el empleado
-$query = $db->prepare("DELETE FROM Empleados WHERE empleadoid = ?");
-$query->execute([$empleadoID]);
-
-// Redirigir a la página principal después de eliminar
-header("Location: empleados.php");
-exit;
 ?>

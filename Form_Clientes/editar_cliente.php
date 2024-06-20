@@ -59,11 +59,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <style>
-    /* Estilo personalizado */
-    body {
-      padding-top: 56px; /* Ajusta el contenido para evitar que se superponga al nav */
-      overflow-x: hidden; /* Evita la barra de desplazamiento horizontal */
-    }
+   body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+        }
     .sidenav {
       height: 100%;
       width: 200px;
@@ -113,48 +118,47 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="../pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
         <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
     </div>
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-md-6">
-            <!-- Formulario de Edición -->
-            <div class="card">
-                <div class="card-header bg-primary text-white">
-                    <h2 class="mb-0">Editar Cliente</h2>
-                </div>
-                <div class="card-body">
-                    <form method="post">
-                        <div class="form-group">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo $cliente['nombre']; ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="apellido">Apellido:</label>
-                            <input type="text" class="form-control" id="apellido" name="apellido" value="<?php echo $cliente['apellido']; ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="cedula">Cédula:</label>
-                            <input type="text" class="form-control" id="cedula" name="cedula" value="<?php echo $cliente['cedula']; ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="direccion">Dirección:</label>
-                            <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $cliente['dirección']; ?>">
-                        </div>
-                        <div class="form-group">
-                            <label for="telefono">Teléfono:</label>
-                            <input type="text" class="form-control" id="telefono" name="telefono" value="<?php echo $cliente['teléfono']; ?>" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Email:</label>
-                            <input type="email" class="form-control" id="email" name="email" value="<?php echo $cliente['email']; ?>" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Cambios</button>
-                    </form>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <!-- Formulario de Edición -->
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h2 class="mb-0">Editar Cliente</h2>
+                    </div>
+                    <div class="card-body">
+                        <form method="post">
+                            <div class="form-group">
+                                <label for="nombre">Nombre:</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<?php echo $cliente['nombre']; ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="apellido">Apellido:</label>
+                                <input type="text" class="form-control" id="apellido" name="apellido" value="<?php echo $cliente['apellido']; ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cedula">Cédula:</label>
+                                <input type="text" class="form-control" id="cedula" name="cedula" value="<?php echo $cliente['cedula']; ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="direccion">Dirección:</label>
+                                <input type="text" class="form-control" id="direccion" name="direccion" value="<?php echo $cliente['dirección']; ?>">
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono">Teléfono:</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono" value="<?php echo $cliente['teléfono']; ?>" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email:</label>
+                                <input type="email" class="form-control" id="email" name="email" value="<?php echo $cliente['email']; ?>" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Guardar Cambios</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-        
     </div>
-</div>
 
 <!-- Scripts de Bootstrap y Font Awesome -->
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

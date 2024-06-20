@@ -11,15 +11,80 @@ html, body, .wrapper {
         background-position: 0% 50%;
     }
 }
-
+html,
+body {
+  height: 100%;
+}
+.wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
 body {
     display: grid;
     place-items: center;
-    margin: 0;
-    background-image: url("svg/dragon-scales\ \(1\).svg");
+    margin: 25px;
+    background-image: url("svg/dragon-scales\ \(3\).svg");
     background-repeat: no-repeat;
     background-size: cover;
     font-family: Poppins;
     color: #000000;
     animation: rotate 5s infinite alternate linear;
+}
+@media (width >= 500px) {
+    body {
+      padding: 0;
+    }
+  }
+  
+/* Estilos personalizados */
+
+/* Ajuste del ancho del contenido principal */
+.content {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+ 
+}
+
+/* Ajuste de los elementos del formulario */
+.card {
+    width: 100%; 
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    max-width: 100%; /* Anchura máxima del formulario */
+}
+
+.card-title {
+    text-align: center; /* Centrar el título */
+    margin-bottom: 20px;
+}
+.card-body {
+    width: 80%; /* Ancho del formulario */
+    padding: 5px;
+}
+
+.form-group {
+    margin-bottom: 50px; /* Espaciado entre los elementos del formulario */
+}
+
+/* Estilos para el botón de agregar cliente */
+.btn-primary {
+
+    width: 50%; /* Ocupar todo el ancho disponible */
+}
+
+/* Estilos para la lista de clientes */
+.container.mt-4 {
+    margin-top: 40px; /* Espaciado desde la parte superior */
+}
+
+h2 {
+    margin-bottom: 5px; /* Espaciado inferior para los encabezados */
 }

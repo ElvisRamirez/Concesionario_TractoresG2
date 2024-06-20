@@ -20,13 +20,13 @@ function obtenerEmpleados($db) {
 }
 
 // Función para generar enlace de edición
-function generarEnlaceEditar($empleadoID) {
-    return "<a href='Form_Empleado/editar.php?id=$empleadoID'><i class='fas fa-edit'></i> Editar</a>";
+function generarEnlaceEditar($empleados) {
+    return "<a href='/Form_Empleado/editar.php?id=$empleados'><i class='fas fa-edit'></i> Editar</a>";
 }
 
 // Función para generar enlace de eliminación
-function generarEnlaceEliminar($empleadoID) {
-    return "<a href='/Concesionario_Tractores/Form_Empleado/eliminar.php?id=$empleadoID' onclick='return confirm(\"¿Estás seguro de eliminar este empleado?\")'><i class='fas fa-trash'></i> Eliminar</a>";
+function generarEnlaceEliminar($empleados) {
+    return "<a href='/Form_Empleado/eliminar.php?id=$empleados' onclick='return confirm(\"¿Estás seguro de eliminar este cliente?\")'><i class='fas fa-trash'></i> Eliminar</a>";
 }
 
 // Mostrar tabla de empleados
@@ -72,12 +72,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = $_POST["email"];
     $cedula = $_POST["cedula"];
 
-    $query = $db->prepare("INSERT INTO Empleados (nombre, apellido, puesto, cedula, teléfono, email) VALUES (?, ?, ?, ?, ?, ?)");
-    $query->execute([$nombre, $apellido, $puesto, $cedula, $telefono, $email]);
+    // Verificar si la cédula ya existe
+    $query = $db->prepare("SELECT COUNT(*) FROM Empleados WHERE cedula = ?");
+    $query->execute([$cedula]);
+    $count = $query->fetchColumn();
 
-    // Recargar la página para actualizar la tabla
-    header("Location: ".$_SERVER['PHP_SELF']);
-    exit;
+    if ($count > 0) {
+        echo "<div class='alert alert-danger'>Error: La cédula ya existe en la base de datos.</div>";
+    } else {
+        $query = $db->prepare("INSERT INTO Empleados (nombre, apellido, puesto, cedula, teléfono, email) VALUES (?, ?, ?, ?, ?, ?)");
+        $query->execute([$nombre, $apellido, $puesto, $cedula, $telefono, $email]);
+        // Recargar la página para actualizar la tabla
+        header("Location: ".$_SERVER['PHP_SELF']);
+        exit;
+    }
 }
 ?>
 

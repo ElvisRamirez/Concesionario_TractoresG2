@@ -208,8 +208,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
     /* Estilo personalizado */
     body {
-      padding-left:  20%; /* Ajusta el contenido para evitar que se superponga al nav */
-      overflow-x: hidden; /* Evita la barra de desplazamiento horizontal */
+        padding-left: 12%;
+        overflow-x: hidden;
     }
     .sidenav {
       height: 100%;
@@ -261,74 +261,79 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
     </div>
 
-<div class="container mt-5">
-    <h2>Realizar Nueva Venta</h2>
-    <?php if ($mensajeError): ?>
-        <div class="alert alert-danger"><?php echo htmlspecialchars($mensajeError); ?></div>
-    <?php endif; ?>
-    <?php if ($mensajePago): ?>
-        <div class="alert alert-success"><?php echo htmlspecialchars($mensajePago); ?></div>
-    <?php endif; ?>
-    <form method="post" action="">
-        <div class="form-group">
-            <label for="buscarCedulaCliente">Cédula del Cliente:</label>
-            <input type="text" class="form-control" id="buscarCedulaCliente" name="buscarCedulaCliente" placeholder="Ingrese la cédula del cliente" value="<?php echo isset($buscarCedulaCliente) ? htmlspecialchars($buscarCedulaCliente) : ''; ?>">
+    <div class="wrapper">
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title text-center">Realizar Nueva Venta</h2>
+                <?php if ($mensajeError): ?>
+                    <div class="alert alert-danger"><?php echo htmlspecialchars($mensajeError); ?></div>
+                <?php endif; ?>
+                <?php if ($mensajePago): ?>
+                    <div class="alert alert-success"><?php echo htmlspecialchars($mensajePago); ?></div>
+                <?php endif; ?>
+                <form method="post" action="">
+                    <div class="form-group">
+                        <label for="buscarCedulaCliente">Cédula del Cliente:</label>
+                        <input type="text" class="form-control" id="buscarCedulaCliente" name="buscarCedulaCliente" placeholder="Ingrese la cédula del cliente" value="<?php echo isset($buscarCedulaCliente) ? htmlspecialchars($buscarCedulaCliente) : ''; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="nombreCliente">Nombre Cliente:</label>
+                        <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" value="<?php echo htmlspecialchars($nombreCliente); ?>" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellidoCliente">Apellido Cliente:</label>
+                        <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" value="<?php echo htmlspecialchars($apellidoCliente); ?>" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="buscarCedulaEmpleado">Cédula del Empleado:</label>
+                        <input type="text" class="form-control" id="buscarCedulaEmpleado" name="buscarCedulaEmpleado" placeholder="Ingrese la cédula del empleado" value="<?php echo isset($buscarCedulaEmpleado) ? htmlspecialchars($buscarCedulaEmpleado) : ''; ?>">
+                    </div>
+                    <div class="form-group">
+                        <label for="nombreEmpleado">Nombre Empleado:</label>
+                        <input type="text" class="form-control" id="nombreEmpleado" name="nombreEmpleado" value="<?php echo htmlspecialchars($nombreEmpleado); ?>" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellidoEmpleado">Apellido Empleado:</label>
+                        <input type="text" class="form-control" id="apellidoEmpleado" name="apellidoEmpleado" value="<?php echo htmlspecialchars($apellidoEmpleado); ?>" readonly>
+                    </div>
+                    <hr>
+                    <div class="form-group">
+                        <label for="idTractorSeleccionado">Seleccionar Tractor:</label>
+                        <select class="form-control" id="idTractorSeleccionado" name="idTractorSeleccionado" onchange="this.form.submit()">
+                            <option value="">Seleccione un tractor...</option>
+                            <?php foreach ($tractoresDisponibles as $tractor): ?>
+                                <option value="<?php echo $tractor['tractorid']; ?>" <?php echo isset($idTractorSeleccionado) && $idTractorSeleccionado == $tractor['tractorid'] ? 'selected' : ''; ?>>
+                                    <?php echo htmlspecialchars($tractor['marca'] . ' ' . $tractor['modelo'] . ' - $' . number_format($tractor['preciounitario'], 2)); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="precioUnitario">Precio Unitario:</label>
+                        <input type="text" class="form-control" id="precioUnitario" name="precioUnitario" value="<?php echo htmlspecialchars(number_format($precioUnitario, 2)); ?>" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="cantidad">Cantidad:</label>
+                        <input type="number" class="form-control" id="cantidad" name="cantidad" value="<?php echo htmlspecialchars($cantidad); ?>" min="1" onchange="this.form.submit()">
+                    </div>
+                    <div class="form-group">
+                        <label for="formaPago">Forma de Pago:</label>
+                        <select class="form-control" id="formaPago" name="formaPago" required>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="tarjeta">Tarjeta</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="totalVenta">Total Venta:</label>
+                        <input type="text" class="form-control" id="totalVenta" name="totalVenta" value="<?php echo htmlspecialchars(number_format($totalVenta, 2)); ?>" readonly>
+                    </div>
+                    <button type="submit" class="btn btn-primary" name="realizarVenta">Realizar Venta</button>
+                </form>
+            </div>
         </div>
-        <div class="form-group">
-            <label for="nombreCliente">Nombre Cliente:</label>
-            <input type="text" class="form-control" id="nombreCliente" name="nombreCliente" value="<?php echo htmlspecialchars($nombreCliente); ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="apellidoCliente">Apellido Cliente:</label>
-            <input type="text" class="form-control" id="apellidoCliente" name="apellidoCliente" value="<?php echo htmlspecialchars($apellidoCliente); ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="buscarCedulaEmpleado">Cédula del Empleado:</label>
-            <input type="text" class="form-control" id="buscarCedulaEmpleado" name="buscarCedulaEmpleado" placeholder="Ingrese la cédula del empleado" value="<?php echo isset($buscarCedulaEmpleado) ? htmlspecialchars($buscarCedulaEmpleado) : ''; ?>">
-        </div>
-        <div class="form-group">
-            <label for="nombreEmpleado">Nombre Empleado:</label>
-            <input type="text" class="form-control" id="nombreEmpleado" name="nombreEmpleado" value="<?php echo htmlspecialchars($nombreEmpleado); ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="apellidoEmpleado">Apellido Empleado:</label>
-            <input type="text" class="form-control" id="apellidoEmpleado" name="apellidoEmpleado" value="<?php echo htmlspecialchars($apellidoEmpleado); ?>" readonly>
-        </div>
-        <hr> <!-- Separador para claridad -->
-        <div class="form-group">
-            <label for="idTractorSeleccionado">Seleccionar Tractor:</label>
-            <select class="form-control" id="idTractorSeleccionado" name="idTractorSeleccionado" onchange="this.form.submit()">
-                <option value="">Seleccione un tractor...</option>
-                <?php foreach ($tractoresDisponibles as $tractor): ?>
-                    <option value="<?php echo $tractor['tractorid']; ?>" <?php echo isset($idTractorSeleccionado) && $idTractorSeleccionado == $tractor['tractorid'] ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($tractor['marca'] . ' ' . $tractor['modelo'] . ' - $' . number_format($tractor['preciounitario'], 2)); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="precioUnitario">Precio Unitario:</label>
-            <input type="text" class="form-control" id="precioUnitario" name="precioUnitario" value="<?php echo htmlspecialchars(number_format($precioUnitario, 2)); ?>" readonly>
-        </div>
-        <div class="form-group">
-            <label for="cantidad">Cantidad:</label>
-            <input type="number" class="form-control" id="cantidad" name="cantidad" value="<?php echo htmlspecialchars($cantidad); ?>" min="1" onchange="this.form.submit()">
-        </div>
-        <div class="form-group">
-            <label for="formaPago">Forma de Pago:</label>
-            <select class="form-control" id="formaPago" name="formaPago" required>
-                <option value="efectivo">Efectivo</option>
-                <option value="tarjeta">Tarjeta</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="totalVenta">Total Venta:</label>
-            <input type="text" class="form-control" id="totalVenta" name="totalVenta" value="<?php echo htmlspecialchars(number_format($totalVenta, 2)); ?>" readonly>
-        </div>
-        <button type="submit" class="btn btn-primary" name="realizarVenta">Realizar Venta</button>
-    </form>
+    </div>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
