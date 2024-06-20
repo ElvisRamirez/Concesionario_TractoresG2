@@ -1,6 +1,7 @@
 <?php
 // Conexión a la base de datos
-$dbHost = 'localhost';
+//$dbHost = '10.241.0.48';
+$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -20,7 +21,6 @@ function obtenerClientes($db) {
 // Función para generar enlace de edición
 function generarEnlaceEditar($clienteID) {
     return "<a href='editar_cliente.php?id=$clienteID'><i class='fas fa-edit'></i> Editar</a>";
-    
 }
 
 // Función para generar enlace de eliminación
@@ -30,13 +30,13 @@ function generarEnlaceEliminar($clienteID) {
 
 // Mostrar tabla de clientes
 function mostrarClientes($clientes) {
-    echo "<table class='table'>
+    echo "<table class='table table-sm'>
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
-                      <th>Cédula</th>
+                    <th>Cédula</th>
                     <th>Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
@@ -50,7 +50,7 @@ function mostrarClientes($clientes) {
                 <td>{$cliente['clienteid']}</td>
                 <td>{$cliente['nombre']}</td>
                 <td>{$cliente['apellido']}</td>
-                 <td>{$cliente['cedula']}</td>
+                <td>{$cliente['cedula']}</td>
                 <td>{$cliente['dirección']}</td>
                 <td>{$cliente['teléfono']}</td>
                 <td>{$cliente['email']}</td>
@@ -60,6 +60,7 @@ function mostrarClientes($clientes) {
 
     echo "</tbody></table>";
 }
+
 // Agregar nuevo cliente
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = $_POST["nombre"];
@@ -86,14 +87,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concesionario de Tractores</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-</head>
-<style>
+    
+    <style>
     /* Estilo personalizado */
     body {
-      padding-left: 20%; /* Ajusta el contenido para evitar que se superponga al nav */
-      overflow-x: hidden; /* Evita la barra de desplazamiento horizontal */
+        padding-left: 12%;
+        overflow-x: hidden;
     }
     .sidenav {
       height: 100%;
@@ -128,51 +130,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   .row {
     transition: transform 0.4s ease; /* Agrega una transición suave al desplazamiento */
   }
-  </style>
+        
+    </style>
 </head>
 <body>
 
 <div class="sidenav" id="mySidenav">
-        <a href="../index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
-        <a href="../Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
-        <a href="../Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
-        <a href="../Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
-        <a href="../tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
-        <a href="../Form_Ventas/ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
-        <a href="../alquiler.php"><i class="fas fa-calendar-alt mr-2"></i> Alquileres</a>
-        <a href="../Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
-        <a href="../pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
-        <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
+    <a href="../index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
+    <a href="../Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
+    <a href="../Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
+    <a href="../Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
+    <a href="../tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
+    <a href="../Form_Ventas/ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
+    <a href="../alquiler.php"><i class="fas fa-calendar-alt mr-2"></i> Alquileres</a>
+    <a href="../Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
+    <a href="../pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
+    <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
+</div>
+
+
+<div class="card">
+    <div class="card-body">
+        <div class="container">
+            <h3 class="card-title text-center">Agregar Nuevo Cliente</h3>
+            <form method="post">
+                <div class="form-group">
+                  
+                    <input type="text" class="form-control" id="nombre"  placeholder="Nombre" required>
+                </div>
+                <div class="form-group">
+                  
+                    <input type="text" class="form-control" id="apellido"  placeholder="Apellido" required>
+                </div>
+                <div class="form-group">
+                  
+                    <input type="text" class="form-control" id="cedula" placeholder="Cédula" name="" required>
+                </div>
+                <div class="form-group">
+                 
+                    <input type="text" class="form-control" id="direccion" placeholder="Dirección" name="direccion">
+                </div>
+                <div class="form-group">
+            
+                    <input type="text" class="form-control" id="telefono"  placeholder="Teléfono" name="telefono" required>
+                </div>
+                <div class="form-group">
+    
+                    <input type="email" class="form-control" id="email"  placeholder="Email" name="email" required>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Cliente</button>
+            </form>
+        </div>
     </div>
-    <div class="container mt-5">
-    <h2>Agregar Nuevo Cliente</h2>
-    <form method="post">
-        <div class="form-group">
-            <label for="nombre">Nombre:</label>
-            <input type="text" class="form-control" id="nombre" name="nombre" required>
-        </div>
-        <div class="form-group">
-            <label for="apellido">Apellido:</label>
-            <input type="text" class="form-control" id="apellido" name="apellido" required>
-        </div>
-        <div class="form-group">
-            <label for="cedula">Cédula:</label>
-            <input type="text" class="form-control" id="cedula" name="cedula" required>
-        </div>
-        <div class="form-group">
-            <label for="direccion">Dirección:</label>
-            <input type="text" class="form-control" id="direccion" name="direccion">
-        </div>
-        <div class="form-group">
-            <label for="telefono">Teléfono:</label>
-            <input type="text" class="form-control" id="telefono" name="telefono" required>
-        </div>
-        <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" required>
-        </div>
-        <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Cliente</button>
-    </form>
 </div>
 
 

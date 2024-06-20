@@ -1,6 +1,7 @@
 <?php
 // Conexión a la base de datos
-$dbHost = 'localhost';
+//$dbHost = '10.241.0.48';
+$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -86,13 +87,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Concesionario de Tractores - Empleados</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+ 
     <style>
     /* Estilo personalizado */
     body {
-      padding-top: 56px; /* Ajusta el contenido para evitar que se superponga al nav */
-      overflow-x: hidden; /* Evita la barra de desplazamiento horizontal */
+        padding-left: 12%;
+        overflow-x: hidden;
     }
     .sidenav {
       height: 100%;
@@ -143,37 +146,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="../pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
         <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
     </div>
-<div class="content">
-    <div class="container mt-5">
-        <h2>Agregar Nuevo Empleado</h2>
-        <form method="post">
-            <div class="form-group">
-                <label for="nombre">Nombre:</label>
-                <input type="text" class="form-control" id="nombre" name="nombre" required>
-            </div>
-            <div class="form-group">
-                <label for="apellido">Apellido:</label>
-                <input type="text" class="form-control" id="apellido" name="apellido" required>
-            </div>
-            <div class="form-group">
-                <label for="puesto">Puesto:</label>
-                <input type="text" class="form-control" id="puesto" name="puesto" required>
-            </div>
-            <div class="form-group">
-                <label for="cedula">Cédula:</label>
-                <input type="text" class="form-control" id="cedula" name="cedula" required>
-            </div>
-            <div class="form-group">
-                <label for="telefono">Teléfono:</label>
-                <input type="text" class="form-control" id="telefono" name="telefono" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email" required>
-            </div>
-            <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Empleado</button>
-        </form>
+    <div class="card">
+    <div class="card-body">
+        <div class="container">
+            <h3 class="card-title text-center">Agregar Nuevo Empleado</h3>
+            <form method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="puesto" name="puesto" placeholder="Puesto" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cédula" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+                </div>
+                <button type="submit" class="btn btn-primary"><i class="fas fa-plus"></i> Agregar Empleado</button>
+            </form>
+        </div>
     </div>
+</div>
+
 
     <div class="container mt-4">
         <h2>Lista de Empleados</h2>

@@ -1,0 +1,25 @@
+/* styles.css */
+* {
+    box-sizing: border-box;
+}
+html, body, .wrapper {
+    height: 100%;
+}
+
+@keyframes rotate {
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+body {
+    display: grid;
+    place-items: center;
+    margin: 0;
+    background-image: url("svg/dragon-scales\ \(1\).svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Poppins;
+    color: #000000;
+    animation: rotate 5s infinite alternate linear;
+}

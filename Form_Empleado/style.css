@@ -1,0 +1,81 @@
+/* styles.css */
+* {
+    box-sizing: border-box;
+}
+
+html, body, .wrapper {
+    height: 100%;
+}
+
+@keyframes rotate {
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+body {
+    display: grid;
+    place-items: center;
+    margin: 0;
+    background-image: url("svg/dragon-scales\ \(1\).svg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-family: Poppins;
+    color: #000000;
+    animation: rotate 2s infinite alternate linear;
+}
+
+/* Estilos personalizados */
+
+/* Contenedor principal */
+.content {
+    display: flex;
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
+}
+
+/* Tarjeta de formulario */
+.card {
+    width: 50%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+/* Título de la tarjeta */
+.card-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Cuerpo de la tarjeta */
+.card-body {
+    width: 80%;
+    padding: 5px;
+}
+
+/* Grupo de formulario */
+.form-group {
+    margin-bottom: 50px; /* Espaciado entre los elementos del formulario */
+}
+
+/* Botón de acción */
+.btn-primary {
+    width: 50%;
+}
+
+/* Contenedor de lista */
+.container.mt-4 {
+    margin-top: 40px;
+}
+
+/* Encabezado */
+h2 {
+    margin-bottom: 5px;
+}
