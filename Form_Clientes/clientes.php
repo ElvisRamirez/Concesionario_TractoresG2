@@ -169,7 +169,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
 </div>
 
-
 <div class="wrapper">
     <div class="card">
         <div class="card-body">
@@ -177,22 +176,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <h3 class="card-title text-center text-shadow">Agregar Nuevo Cliente</h3>
                 <form method="post">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="nombre" placeholder="Nombre" required>
+                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="apellido" placeholder="Apellido" required>
+                        <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="cedula" placeholder="Cédula" name="" required>
+                        <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cédula" required>
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="direccion" placeholder="Dirección" name="direccion">
+                        <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Dirección">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" id="telefono" placeholder="Teléfono" name="telefono" required>
+                        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" required>
                     </div>
                     <div class="form-group">
-                        <input type="email" class="form-control" id="email" placeholder="Email" name="email" required>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
                     </div>
                     <button type="submit" class="btn btn-custom"><i class="fas fa-plus"></i> Agregar Cliente</button>
                 </form>
@@ -200,7 +199,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 </div>
-
 
 <div class="container ">
     <h2 class="text-shadow text-white"  >Lista de Clientes</h2>
