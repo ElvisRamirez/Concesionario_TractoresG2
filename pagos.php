@@ -110,7 +110,7 @@ try {
         <a href="../alquiler.php"><i class="fas fa-calendar-alt mr-2"></i> Alquileres</a>
         <a href="Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
         <a href="pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
-        <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
+        <a href="inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
     </div>
     <div class="container">
         <h2 class="mt-4 mb-4">Lista de Pagos</h2>

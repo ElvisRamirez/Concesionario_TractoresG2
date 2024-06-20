@@ -32,6 +32,9 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Agregar la biblioteca de iconos de Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <title>Inventario de Tractores</title>
@@ -96,11 +99,11 @@ try {
         <a href="../Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
         <a href="../Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
         <a href="../tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
-        <a href="../Form_Ventas/ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
+        <a href="Form_Ventas/ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
         <a href="../alquiler.php"><i class="fas fa-calendar-alt mr-2"></i> Alquileres</a>
         <a href="../Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
         <a href="pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
-        <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
+        <a href="inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
     </div>
     <h2>Inventario de Tractores</h2>
     <table>

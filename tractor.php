@@ -135,7 +135,7 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
             background-color: #dee2e6; /* Cambia el color de fondo cuando se pasa el mouse sobre los enlaces */
         }
         .content {
-            margin-left: 250px; /* Ajusta el margen izquierdo para dejar espacio para el menú */
+            margin-left: 230px; /* Ajusta el margen izquierdo para dejar espacio para el menú */
         }
         .table-img {
             width: 100px; /* Ajusta el tamaño de las imágenes en la tabla */
@@ -172,20 +172,20 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
 <body>
 <div class="sidenav" id="mySidenav">
         <a href="index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
-        <a href="../Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
-        <a href="../Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
+        <a href="Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
+        <a href="Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
         <a href="Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
         <a href="tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
         <a href="Form_Ventas/ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
         <a href="alquiler.php"><i class="fas fa-calendar-alt mr-2"></i> Alquileres</a>
-        <a href="../Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
-        <a href="../pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
-        <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
+        <a href="Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
+        <a href="pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
+        <a href="inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
     </div>
 
 <div class="container mt-5 content">
     <!-- Botón para registrar un nuevo modelo de tractor -->
-    <div class="container mt-3 text-right">
+    <div class="container mt-3 text-left">
     <a href="nuevo_modelo_tractor.php" class="btn btn-success"><i class="fas fa-plus"></i> Nuevo Modelo de Tractor</a>
 </div>
     <h1 class="text-white text-shadow1" >Concesionario de Tractores</h1>
@@ -225,7 +225,7 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
                     ?>
                 </select>
             </div>
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
                 <label for="año">Año:</label>
                 <input type="number" class="form-control" name="año" id="año" min="1900" max="<?php echo date("Y"); ?>" required>
             </div>
@@ -246,7 +246,7 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
                 <input type="number" class="form-control" name="precioUnitario" id="precioUnitario" step="0.01" min="0" required>
             </div>
 
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-">
                 <label for="cantidad">Cantidad:</label>
                 <input type="number" class="form-control" name="cantidad" id="cantidad" min="1" required onchange="calcularPrecioCompra()">
             </div>
@@ -281,7 +281,7 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
     
 
     <!-- Tabla de tractores existentes -->
-    <table class="table table-bordered mt-4">
+    <table class="table table-bordered mt-3">
         <thead>
             <tr>
                 <th>ID</th>

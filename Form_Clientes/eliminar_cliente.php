@@ -36,6 +36,6 @@ $query = $db->prepare("DELETE FROM Clientes WHERE clienteid = ?");
 $query->execute([$clienteID]);
 
 // Redirigir a la página principal después de eliminar
-header("Location: /clientes.php");
+header("Location: ../Form_Clientes/clientes.php");
 exit;
 ?>

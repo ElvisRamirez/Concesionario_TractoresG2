@@ -22,7 +22,7 @@ function obtenerEmpleados($db) {
 
 // Función para generar enlace de edición
 function generarEnlaceEditar($empleadoID) {
-    return "<a href='Form_Empleado/editar.php?id=$empleadoID'><i class='fas fa-edit'></i> Editar</a>";
+    return "<a href='../Form_Empleado/editar.php?id=$empleadoID'><i class='fas fa-edit'></i> Editar</a>";
 }
 
 // Función para generar enlace de eliminación
@@ -103,7 +103,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
     /* Estilo personalizado */
     body {
-        padding-left: 12%;
+        padding-left: 16%;
         overflow-x: hidden;
     }
     .sidenav {
