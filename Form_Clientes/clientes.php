@@ -175,26 +175,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="container">
                 <h3 class="card-title text-center text-shadow">Agregar Nuevo Cliente</h3>
                 <form method="post">
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cédula" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Dirección">
-                    </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
-                    </div>
-                    <button type="submit" class="btn btn-custom"><i class="fas fa-plus"></i> Agregar Cliente</button>
-                </form>
+    <div class="form-group">
+        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" required>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Cédula" pattern="[0-9]{1,10}" maxlength="10" title="La cédula debe contener entre 1 y 10 dígitos numéricos" required>
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="direccion" name="direccion" placeholder="Dirección">
+    </div>
+    <div class="form-group">
+        <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" pattern="[0-9]{1,10}" maxlength="10" title="El teléfono debe contener entre 1 y 10 dígitos numéricos" required>
+    </div>
+    <div class="form-group">
+        <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
+    </div>
+    <button type="submit" class="btn btn-custom"><i class="fas fa-plus"></i> Agregar Cliente</button>
+</form>
+
             </div>
         </div>
     </div>

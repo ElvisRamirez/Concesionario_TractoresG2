@@ -60,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
     /* Estilo personalizado */
     body {
+      padding-left: 20%;
       padding-top: 56px; /* Ajusta el contenido para evitar que se superponga al nav */
       overflow-x: hidden; /* Evita la barra de desplazamiento horizontal */
     }
