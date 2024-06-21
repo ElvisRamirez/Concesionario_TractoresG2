@@ -174,6 +174,7 @@ $alquileres = $queryDetalles->fetchAll(PDO::FETCH_ASSOC);
             </tr>
         </thead>
         <tbody>
+          
             <?php foreach ($alquileres as $alquiler): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($alquiler['alquilerid']); ?></td>
