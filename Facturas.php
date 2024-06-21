@@ -32,6 +32,21 @@ try {
     // Preparar y ejecutar la consulta
     $stmt = $db->query($sql);
     $facturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Consulta para obtener los detalles de los alquileres
+$queryDetalles = $db->prepare("
+SELECT a.AlquilerID, c.Nombre AS Cliente, e.Nombre AS Empleado, m.Marca, m.Modelo, da.PrecioUnitario, da.Cantidad, a.FechaInicio, a.FechaFin, a.TotalAlquiler
+FROM Alquileres a
+INNER JOIN Clientes c ON a.ClienteID = c.ClienteID
+INNER JOIN Empleados e ON a.EmpleadoID = e.EmpleadoID
+INNER JOIN DetallesAlquiler da ON a.AlquilerID = da.AlquilerID
+INNER JOIN Tractores t ON da.TractorID = t.TractorID
+INNER JOIN ModelosTractores m ON t.ModeloID = m.ModeloID
+");
+
+
+$queryDetalles->execute();
+$alquileres = $queryDetalles->fetchAll(PDO::FETCH_ASSOC);
+
 
 } catch (PDOException $e) {
     die("Error al conectar a la base de datos: " . $e->getMessage());
@@ -142,7 +157,39 @@ try {
             </tbody>
         </table>
     </div>
-
+    <div class="container mt-5">
+    <h2 class="mb-4">Detalles de Alquileres</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Alquiler ID</th>
+                <th>Cliente</th>
+                <th>Empleado</th>
+                <th>Tractor</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Total Alquiler</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($alquileres as $alquiler): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($alquiler['alquilerid']); ?></td>
+                    <td><?php echo htmlspecialchars($alquiler['cliente']); ?></td>
+                    <td><?php echo htmlspecialchars($alquiler['empleado']); ?></td>
+                    <td><?php echo htmlspecialchars($alquiler['marca'] . ' ' . $alquiler['modelo']); ?></td>
+                    <td><?php echo htmlspecialchars($alquiler['preciounitario']); ?></td>
+                    <td><?php echo htmlspecialchars($alquiler['cantidad']); ?></td>
+                    <td><?php echo htmlspecialchars($alquiler['fechainicio']); ?></td>
+                    <td><?php echo htmlspecialchars($alquiler['fechafin']); ?></td>
+                    <td><?php echo htmlspecialchars($alquiler['totalalquiler']); ?></td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
     <!-- Scripts de Bootstrap (jQuery y Popper.js necesarios para Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>

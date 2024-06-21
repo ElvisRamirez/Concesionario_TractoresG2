@@ -153,6 +153,9 @@ function obtenerTractoresDisponibles($db) {
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
 }
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">

@@ -57,26 +57,30 @@ function realizarVenta($db, $clienteID, $empleadoID, $tractorID, $cantidad, $pre
         $queryVenta->execute([$clienteID, $empleadoID, $totalVenta]);
         $facturaID = $queryVenta->fetchColumn();
 
-        // Obtener la descripción del tractor vendido desde la tabla ModelosTractores
-        $queryDescripcion = $db->prepare("
-            SELECT Marca, Modelo
-            FROM ModelosTractores
-            WHERE ModeloID = (
-                SELECT ModeloID
-                FROM Tractores
-                WHERE TractorID = ?
-            )
-        ");
-        $queryDescripcion->execute([$tractorID]);
-        $tractor = $queryDescripcion->fetch(PDO::FETCH_ASSOC);
+     // Obtener la descripción del tractor vendido desde la tabla ModelosTractores
+$queryDescripcion = $db->prepare("
+SELECT Marca, Modelo
+FROM ModelosTractores
+WHERE ModeloID = (
+    SELECT ModeloID
+    FROM Tractores
+    WHERE TractorID = ?
+)
+");
+$queryDescripcion->execute([$tractorID]);
+$tractor = $queryDescripcion->fetch(PDO::FETCH_ASSOC);
 
-        // Verificar si las claves 'Marca' y 'Modelo' están definidas en $tractor
-        if (isset($tractor['Marca']) && isset($tractor['Modelo'])) {
-            $descripcion = $tractor['Marca'] . ' ' . $tractor['Modelo'];
-        } else {
-            // Manejar la situación donde las claves no están definidas
-            $descripcion = 'Descripción no disponible';
-        }
+// Verificar si las claves 'Marca' y 'Modelo' están definidas en $tractor
+if (isset($tractor['Marca']) && isset($tractor['Modelo'])) {
+$descripcion = $tractor['Marca'] . ' ' . $tractor['Modelo'];
+} else {
+// Manejar la situación donde las claves no están definidas
+$descripcion = 'Descripción no disponible';
+}
+
+// Pasar la descripción (o usarla según sea necesario)
+echo $descripcion;
+
 
         // Insertar en tabla DetallesFactura
         $queryDetalleFactura = $db->prepare("
