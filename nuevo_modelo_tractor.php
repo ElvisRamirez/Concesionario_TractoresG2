@@ -1,8 +1,8 @@
 <?php
 // Conexión a la base de datos
-$dbHost = '10.241.0.57';
+//$dbHost = '10.241.0.57';
 //$dbHost = '10.241.0.48';
-//$dbHost = '192.168.10.10';
+$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -22,7 +22,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $descripcion = $_POST["descripcion"];
 
         // Insertar el nuevo modelo de tractor en la tabla ModelosTractores
-        $query = $db->prepare("INSERT INTO ModelosTractores (Marca, Modelo, Descripción) VALUES (?, ?, ?)");
+        $query = $db->prepare("INSERT INTO ModelosTractores (Marca, Modelo, descripcion) VALUES (?, ?, ?)");
+
         $query->execute([$marca, $modelo, $descripcion]);
 
         // Redirigir o mostrar mensaje de éxito
@@ -136,7 +137,8 @@ $modelos = $queryModelos->fetchAll(PDO::FETCH_ASSOC);
                     <td><?php echo $modelo['modeloid']; ?></td>
                     <td><?php echo $modelo['marca']; ?></td>
                     <td><?php echo $modelo['modelo']; ?></td>
-                    <td><?php echo $modelo['descripción']; ?></td>
+                    <td><?php echo $modelo['descripcion']; ?></td>
+
                 </tr>
                 <?php endforeach; ?>
             </tbody>

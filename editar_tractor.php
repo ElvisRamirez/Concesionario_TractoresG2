@@ -1,8 +1,8 @@
 <?php
 // Conexión a la base de datos (misma configuración que tractor.php)
-$dbHost = '10.241.0.57';
+//$dbHost = '10.241.0.57';
 //$dbHost = '10.241.0.48';
-//$dbHost = '192.168.10.10';
+$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -18,11 +18,8 @@ try {
 if (!isset($_GET['tractorID']) || empty($_GET['tractorID'])) {
     die("ID de tractor no proporcionado.");
 }
-$modeloID = isset($tractor['ModeloID']) ? $tractor['ModeloID'] : "";
-$año = isset($tractor['Año']) ? $tractor['Año'] : "";
-$estado = isset($tractor['Estado']) ? $tractor['Estado'] : "";
 
-$tractorID = $_GET['tractorID'];
+$tractorID = isset($_GET['tractorID']) ? $_GET['tractorID'] : "";
 
 // Obtener los detalles del tractor
 $query = $db->prepare("SELECT T.*, M.Marca, M.Modelo FROM Tractores T INNER JOIN ModelosTractores M ON T.ModeloID = M.ModeloID WHERE TractorID = ?");
@@ -34,19 +31,19 @@ if (!$tractor) {
     die("Tractor no encontrado.");
 }
 
-// Obtener todos los modelos de tractores
-$queryModelos = $db->query("SELECT * FROM ModelosTractores");
-$modelos = $queryModelos->fetchAll(PDO::FETCH_ASSOC);
-
-// Inicializar variables con los valores actuales del tractor
+// Ahora que has obtenido los detalles del tractor, puedes acceder a sus claves
 $modeloID = isset($tractor['ModeloID']) ? $tractor['ModeloID'] : "";
 $año = isset($tractor['Año']) ? $tractor['Año'] : "";
 $estado = isset($tractor['Estado']) ? $tractor['Estado'] : "";
 
+// Obtener todos los modelos de tractores para el menú desplegable
+$query = $db->query("SELECT * FROM ModelosTractores ORDER BY Modelo");
+$modelos = $query->fetchAll(PDO::FETCH_ASSOC);
+
 // Manejar el formulario de actualización
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $modeloID = $_POST["modeloID"];
-    $año = $_POST["año"];
+    $modeloID = intval($_POST["modeloID"]);
+    $año = intval($_POST["año"]);
     $estado = $_POST["estado"];
 
     // Actualizar el tractor en la base de datos
@@ -66,6 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Tractor</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
     /* Estilo personalizado */
     body {
@@ -127,17 +125,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <div class="form-group">
                 <label for="modeloID">Modelo:</label>
                 <select class="form-control" id="modeloID" name="modeloID" required>
-    <?php foreach ($modelos as $modelo): ?>
-        <option value="<?php echo $modelo['ModeloID']; ?>" <?php if ($modelo['ModeloID'] == $modeloID) echo 'selected'; ?>>
-            <?php echo $modelo['Marca'] . ' - ' . $modelo['Modelo']; ?>
-        </option>
-    <?php endforeach; ?>
-</select>
-
+                    <?php foreach ($modelos as $modelo): ?>
+                        <option value="<?php echo $modelo['ModeloID']; ?>" <?php if ($modelo['ModeloID'] == $modeloID) echo 'selected'; ?>>
+                            <?php echo $modelo['Marca'] . ' - ' . $modelo['Modelo']; ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
             </div>
             <div class="form-group">
                 <label for="año">Año:</label>
-                <input type="number" class="form-control" id="año" name="año" value="<?php echo $año; ?>" required>
+                <input type="number" class="form-control" id="año" name="año" value="<?php echo $año; ?>" min="1900" max="<?php echo date('Y'); ?>" required>
             </div>
             <div class="form-group">
                 <label for="estado">Estado:</label>

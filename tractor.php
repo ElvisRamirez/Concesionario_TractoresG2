@@ -1,8 +1,8 @@
 <?php
 // Conexión a la base de datos
-$dbHost = '10.241.0.57';
+//$dbHost = '10.241.0.57';
 //$dbHost = '10.241.0.48';
-//$dbHost = '192.168.10.10';
+$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -310,7 +310,9 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
                             ="tractorID" value="<?php echo $tractor['tractorid']; ?>">
                             <button type="submit" name="eliminarTractor" class="btn btn-danger btn-sm">Eliminar</button>
                         </form>
+                        
                         <a href="editar_tractor.php?tractorID=<?php echo $tractor['tractorid']; ?>" class="btn btn-warning btn-sm">Editar</a>
+
                     </td>
                 </tr>
             <?php endforeach; ?>
