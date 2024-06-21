@@ -1,21 +1,62 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  web:
-    image: php:7.4-apache
-    ports:
-      - "8080:80"
-    volumes:
-      - ./src:/var/www/html
-
   db:
-    image: postgres:latest
+    image: postgres
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 593
       POSTGRES_DB: Concesionario_Tractores
+    ports:
+      - "5432:5432"
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d
+
+  php:
+    build:
+      context: .
+      dockerfile: ./php/Dockerfile
+    volumes:
+      - ./src:/var/www/html
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+
+  web:
+    image: httpd:2.4
+    volumes:
+      - ./html:/usr/local/apache2/htdocs/
+    ports:
+      - "8081:80"
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+
+  postgres-exporter:
+    image: quay.io/prometheuscommunity/postgres-exporter
+    ports:
+      - "9187:9187"
+    environment:
+      DATA_SOURCE_NAME: "postgresql://postgres:593@db:5432/Concesionario_Tractores?sslmode=disable"
+    depends_on:
+      - db
 
 volumes:
-  pgdata:
+  grafana_data:
