@@ -1,6 +1,9 @@
 <?php
 //$dbHost = '10.241.0.57';
+<<<<<<< HEAD
 //$dbHost = '10.241.0.48';
+=======
+>>>>>>> 0f36438626a01936e3363aa73825565ad528c9d8
 $dbHost = '10.241.0.44';
 //$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';

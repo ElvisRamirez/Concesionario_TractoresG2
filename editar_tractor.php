@@ -1,8 +1,6 @@
 <?php
 // Conexión a la base de datos (misma configuración que tractor.php)
-//$dbHost = '10.241.0.57';
-//$dbHost = '10.241.0.48';
-$dbHost = '192.168.10.10';
+$dbHost = '10.241.0.44';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -19,9 +17,9 @@ if (!isset($_GET['tractorID']) || empty($_GET['tractorID'])) {
     die("ID de tractor no proporcionado.");
 }
 
-$tractorID = isset($_GET['tractorID']) ? $_GET['tractorID'] : "";
+$tractorID = $_GET['tractorID'];
 
-// Obtener los detalles del tractor
+/// Obtener los detalles del tractor
 $query = $db->prepare("SELECT T.*, M.Marca, M.Modelo FROM Tractores T INNER JOIN ModelosTractores M ON T.ModeloID = M.ModeloID WHERE TractorID = ?");
 $query->execute([$tractorID]);
 $tractor = $query->fetch(PDO::FETCH_ASSOC);
@@ -31,24 +29,19 @@ if (!$tractor) {
     die("Tractor no encontrado.");
 }
 
-// Ahora que has obtenido los detalles del tractor, puedes acceder a sus claves
-$modeloID = isset($tractor['ModeloID']) ? $tractor['ModeloID'] : "";
+// Obtener el año y el estado del tractor si están definidos
 $año = isset($tractor['Año']) ? $tractor['Año'] : "";
 $estado = isset($tractor['Estado']) ? $tractor['Estado'] : "";
 
-// Obtener todos los modelos de tractores para el menú desplegable
-$query = $db->query("SELECT * FROM ModelosTractores ORDER BY Modelo");
-$modelos = $query->fetchAll(PDO::FETCH_ASSOC);
 
 // Manejar el formulario de actualización
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $modeloID = intval($_POST["modeloID"]);
     $año = intval($_POST["año"]);
     $estado = $_POST["estado"];
 
     // Actualizar el tractor en la base de datos
-    $query = $db->prepare("UPDATE Tractores SET ModeloID = ?, Año = ?, Estado = ? WHERE TractorID = ?");
-    $query->execute([$modeloID, $año, $estado, $tractorID]);
+    $query = $db->prepare("UPDATE Tractores SET Año = ?, Estado = ? WHERE TractorID = ?");
+    $query->execute([$año, $estado, $tractorID]);
 
     // Redirigir a la página principal después de la actualización
     header("Location: tractor.php");
@@ -122,30 +115,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <div class="container mt-5">
         <h1>Editar Tractor</h1>
         <form method="post">
-            <div class="form-group">
-                <label for="modeloID">Modelo:</label>
-                <select class="form-control" id="modeloID" name="modeloID" required>
-                    <?php foreach ($modelos as $modelo): ?>
-                        <option value="<?php echo $modelo['ModeloID']; ?>" <?php if ($modelo['ModeloID'] == $modeloID) echo 'selected'; ?>>
-                            <?php echo $modelo['Marca'] . ' - ' . $modelo['Modelo']; ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="form-group">
-                <label for="año">Año:</label>
-                <input type="number" class="form-control" id="año" name="año" value="<?php echo $año; ?>" min="1900" max="<?php echo date('Y'); ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="estado">Estado:</label>
-                <select class="form-control" id="estado" name="estado" required>
-                    <option value="disponible" <?php if ($estado == 'disponible') echo 'selected'; ?>>Disponible</option>
-                    <option value="vendido" <?php if ($estado == 'vendido') echo 'selected'; ?>>Vendido</option>
-                    <option value="alquilado" <?php if ($estado == 'alquilado') echo 'selected'; ?>>Alquilado</option>
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-        </form>
+    <div class="form-group">
+        <label for="año">Año:</label>
+        <input type="number" class="form-control" id="año" name="año" value="<?php echo htmlspecialchars($año); ?>" min="1900" max="<?php echo date('Y'); ?>" required>
+    </div>
+    <div class="form-group">
+        <label for="estado">Estado:</label>
+        <select class="form-control" id="estado" name="estado" required>
+            <option value="disponible" <?php if ($estado == 'disponible') echo 'selected'; ?>>Disponible</option>
+            <option value="vendido" <?php if ($estado == 'vendido') echo 'selected'; ?>>Vendido</option>
+            <option value="alquilado" <?php if ($estado == 'alquilado') echo 'selected'; ?>>Alquilado</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+</form>
+
     </div>
 </body>
 </html>

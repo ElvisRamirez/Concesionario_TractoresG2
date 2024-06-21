@@ -1,8 +1,8 @@
 <?php
 // Conexión a la base de datos
 //$dbHost = '10.241.0.57';
-//$dbHost = '10.241.0.48';
-$dbHost = '192.168.10.10';
+$dbHost = '10.241.0.44';
+//$dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
@@ -52,14 +52,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $cantidad = $_POST["cantidad"];
         $precioCompra = $_POST["precioCompra"];
 
-        // Manejo de la imagen (carga y almacenamiento)
-        $imagenData = file_get_contents($imagen['tmp_name']);
+     // Manejo de la imagen (carga y almacenamiento)
+$imagenData = file_get_contents($imagen['tmp_name']);
 
-        // Obtener el precio de compra ingresado
-$precioCompra = $_POST["precioCompra"];
+// Calcular el precio de compra total
+$precioCompraTotal = $precioCompra * $cantidad;
 
 // Calcular el precio unitario para los clientes (precio de compra + 15%)
-$precioUnitario = ($precioCompra / $cantidad) * 1.15;
+if ($cantidad > 0) {
+    $precioUnitario = ($precioCompra / $cantidad) * 1.15;
+} else {
+    // Manejo de error o valor por defecto
+    $precioUnitario = 0; // O cualquier valor por defecto que sea apropiado para tu aplicación
+}
+
 
 // Insertar el nuevo tractor en la tabla Tractores
 $query = $db->prepare("INSERT INTO Tractores (ModeloID, Imagen, Año, Estado) VALUES (?, ?, ?, ?)");
@@ -72,7 +78,7 @@ $tractorID = $db->lastInsertId();
 
 // Insertar el nuevo registro en la tabla Inventario
 $query = $db->prepare("INSERT INTO Inventario (TractorID, ProveedorID, FechaIngreso, Cantidad, PrecioCompra, PrecioUnitario) VALUES (?, ?, CURRENT_DATE, ?, ?, ?)");
-$query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnitario]);
+$query->execute([$tractorID, $proveedorID, $cantidad, $precioCompraTotal, $precioUnitario]);
 
 
         // Redirigir o mostrar mensaje de éxito
@@ -252,19 +258,21 @@ $query->execute([$tractorID, $proveedorID, $cantidad, $precioCompra, $precioUnit
             </div>
 
             <div class="form-group col-md-4">
-                <label for="precioCompra">Precio de Compra:</label>
-                <input type="number" class="form-control" name="precioCompra" id="precioCompra" step="0.01" min="0" readonly>
-            </div>
+    <label for="precioCompra">Precio de Compra (total):</label>
+    <input type="number" class="form-control" name="precioCompra" id="precioCompra" step="0.01" min="0" required readonly>
+</div>
+
             <script>
                 function calcularPrecioCompra() {
-                    var precioUnitario = parseFloat(document.getElementById('precioUnitario').value);
-                    var cantidad = parseInt(document.getElementById('cantidad').value);
+    var precioUnitario = parseFloat(document.getElementById('precioUnitario').value);
+    var cantidad = parseInt(document.getElementById('cantidad').value);
 
-                    if (!isNaN(precioUnitario) && !isNaN(cantidad) && cantidad > 0) {
-                        var precioCompra = precioUnitario * cantidad;
-                        document.getElementById('precioCompra').value = precioCompra.toFixed(2);
-                    }
-                }
+    if (!isNaN(precioUnitario) && !isNaN(cantidad) && cantidad > 0) {
+        var precioCompra = precioUnitario * cantidad;
+        document.getElementById('precioCompra').value = precioCompra.toFixed(2);
+    }
+}
+
             </script>
         </div>
         
