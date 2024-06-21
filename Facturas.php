@@ -106,7 +106,7 @@ try {
         <a href="../Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
         <a href="../Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
         <a href="../Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
-        <a href="../tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
+        <a href="tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
         <a href="../Form_Ventas/ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
         <a href="alquiler.php"><i class="fas fa-calendar-alt mr-2"></i> Alquileres</a>
         <a href="Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>

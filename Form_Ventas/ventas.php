@@ -114,6 +114,7 @@ $cantidad = 1;
 $totalVenta = 0.00;
 $mensajeError = "";
 $mensajePago = "";
+$cantidadDisponible=0.00;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["buscarCedulaCliente"])) {
