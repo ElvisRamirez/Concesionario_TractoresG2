@@ -29,7 +29,6 @@ services:
       - ./html:/usr/local/apache2/htdocs/
     ports:
       - "8081:80"
-
   grafana:
     image: grafana/grafana
     ports:

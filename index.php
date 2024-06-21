@@ -1,4 +1,5 @@
 <?php
+//HOLA QUE HACE
 // Conexión a la base de datos
 //$dbHost = '10.241.0.57';
 $dbHost = '10.241.0.44';
