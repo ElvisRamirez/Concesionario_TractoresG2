@@ -32,16 +32,19 @@ try {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Menú de Navegación Lateral con JavaScript</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Agregar la biblioteca de iconos de Bootstrap -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
   <style>
     /* Estilo personalizado */
     body {
-      padding-top: 56px; /* Ajusta el contenido para evitar que se superponga al nav */
+    
       overflow-x: hidden; /* Evita la barra de desplazamiento horizontal */
     }
     .sidenav {
+    
       height: 100%;
       width: 200px;
       position: fixed;
@@ -63,25 +66,28 @@ try {
     }
     .content {
       margin-left: 250px; /* Ajusta el margen izquierdo para dejar espacio para el menú */
+      padding: 20px;
     }
-     /* Estilo personalizado */
-  .row-with-transition {
-    overflow-x: hidden;
-  }
-  .row-with-transition:hover .row {
-    transform: translateX(-235px); /* Ajusta el desplazamiento según tus necesidades */
-  }
-  .row {
-    transition: transform 0.4s ease; /* Agrega una transición suave al desplazamiento */
-  }
-  .label-highlight {
-            background-color: white;
-            color: black;
-            padding: 0.5em 1em;
-            border-radius: 0.25em;
-            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            width: 25pc;
-        }
+    /* Estilo personalizado */
+    .row-with-transition {
+      overflow-x: hidden;
+    }
+    .row-with-transition:hover .row {
+      transform: translateX(-235px); /* Ajusta el desplazamiento según tus necesidades */
+    }
+    .row {
+      transition: transform 0.4s ease; /* Agrega una transición suave al desplazamiento */
+    }
+    .label-highlight {
+      background-color: white;
+      color: black;
+      padding: 0.5em 1em;
+      border-radius: 0.25em;
+      box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      width: 25pc;
+    }
+    
+
   </style>
 </head>
 <body>
@@ -98,14 +104,58 @@ try {
         <a href="pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
         <a href="inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
     </div>
+    
 <div class="container-fluid content">
   <div class="presentation">
-    <h2 class="mb-4 ">Bienvenido al Concesionario de Tractores</h2>
+    <h2 class="mb-4 text-left">Bienvenido al Concesionario de Tractores</h2>
+    <div class="d-flex" >
+  <div id="myCarousel" class="carousel slide" data-ride="carousel">
+    <!-- Indicadores -->
+    <ul class="carousel-indicators">
+      <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+      <li data-target="#myCarousel" data-slide-to="1"></li>
+      <li data-target="#myCarousel" data-slide-to="2"></li>
+    </ul>
+    
+    <!-- Slideshow -->
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="imagenes/Tractor_carusel_1.jpg" alt="Imagen 1" width="1100" height="500">
+        <div class="carousel-caption">
+          <h3>New Holland T7.270</h3>
+          <p>"Potencia y eficiencia en cada surco del campo."</p>
+        </div>   
+      </div>
+      <div class="carousel-item">
+        <img src="imagenes/Tractor_carusel_2.jpg" alt="Imagen 2" width="1100" height="500">
+        <div class="carousel-caption">
+          <h3>Massey Ferguson 8700 S</h3>
+          <p>"La tecnología que impulsa la agricultura moderna."</p>
+        </div>   
+      </div>
+      <div class="carousel-item">
+        <img src="imagenes/Tractor_carusel_3.jpg" alt="Imagen 3" width="1100" height="500">
+        <div class="carousel-caption">
+          <h3>Kubota M7-171</h3>
+          <p>"El aliado perfecto para la agricultura de hoy."</p>
+        </div>   
+      </div>
+    </div>
+    
+    <!-- Controles Izquierda y Derecha -->
+    <a class="carousel-control-prev" href="#myCarousel" data-slide="prev">
+      <span class="carousel-control-prev-icon"></span>
+    </a>
+    <a class="carousel-control-next" href="#myCarousel" data-slide="next">
+      <span class="carousel-control-next-icon"></span>
+    </a>
+  </div>
+</div>
+
     <p class="mb-4 ">Somos líderes en la venta y servicio de tractores agrícolas.</p>
     <p class="mb-4">Contamos con una amplia gama de tractores de las mejores marcas del mercado.</p>
     <p class="mb-4">Nuestro equipo de expertos está listo para ayudarte a encontrar el tractor perfecto para tus necesidades.</p>
     <p class="mb-4">Visítanos hoy y descubre cómo podemos ayudarte a potenciar tu trabajo en el campo.</p>
-    <img src="tractor.jpg" alt="Tractor en el campo" class="img-fluid rounded shadow">
   </div>
 
 
