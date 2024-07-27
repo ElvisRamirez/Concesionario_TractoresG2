@@ -4,11 +4,11 @@ session_start();
 // Datos de conexión disponibles
 $credentials = [
     'postgres' => ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'postgres', 'password' => '593'],
-    'admin1' => ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'admin1', 'password' => 'admin'],
-'empleado1'=> ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'empleado1', 'password' => 'empleado'],
     'usuario1'=> ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'usuario1', 'password' => 'usuario'],
-]
-;
+    'admin1' => ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'admin1', 'password' => 'admin'],
+    'empleado1'=> ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'empleado1', 'password' => 'empleado'],
+    
+];
 
 
 // Recoger datos del formulario

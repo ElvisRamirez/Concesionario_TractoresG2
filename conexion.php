@@ -1,8 +1,10 @@
 <?php
 session_start();
+$username = $_SESSION['username'] ?? '';
+$userRole = $_SESSION['userRole'] ?? '';
 
 // Verificar que el usuario está autenticado
-if (!isset($_SESSION['username'])) {
+if (empty($username)) {
     die("No estás autenticado.");
 }
 
@@ -16,9 +18,7 @@ try {
     // Establecer conexión PDO
     $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Aquí puedes realizar otras configuraciones o consultas iniciales si es necesario
 } catch (PDOException $e) {
     die("Error al conectar a la base de datos: " . $e->getMessage());
 }
-?>
+
