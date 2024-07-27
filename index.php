@@ -1,31 +1,16 @@
 <?php
-//HOLA QUE HACE
-// Conexión a la base de datos
-$dbHost = 'localhost';
-//$dbHost = '10.241.0.44';
-$dbName = 'Concesionario_Tractores';
-$dbUser = 'postgres';
-$dbPass = '593';
+// Incluir el archivo de conexión
+include 'conexion.php';
 
-try {
-    $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // Consulta SQL para obtener los últimos tractores disponibles
-    $sql = "SELECT t.Imagen, mt.Marca, mt.Modelo, t.Año, t.Estado, mt.Descripcion AS DescripcionTractor
-            FROM Tractores t
-            INNER JOIN ModelosTractores mt ON t.ModeloID = mt.ModeloID
-            WHERE t.Estado = 'disponible'
-            ORDER BY t.TractorID DESC
-            LIMIT 3"; // Obtener los últimos 3 tractores disponibles
+ // Consulta SQL para obtener los últimos tractores disponibles desde la vista
+ $sql = "SELECT * FROM ultimos_tractores_disponibles";
 
-    $stmt = $db->query($sql);
-    $tractores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+ // Preparar y ejecutar la consulta
+ $stmt = $db->query($sql);
+ $tractores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-} catch (PDOException $e) {
-    die("Error al conectar a la base de datos: " . $e->getMessage());
-}
 ?>
+
 
 
 <!DOCTYPE html>

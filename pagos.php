@@ -2,26 +2,12 @@
 // Incluir el archivo de conexión
 include 'conexion.php';
 
-// Consulta SQL para obtener datos de pagos con detalles de factura
-$sql = "SELECT
-            p.pagoid,
-            p.facturaid,
-            p.formapago,
-            p.fechapago,
-            p.montopago,
-            f.fechafactura,
-            f.totalfactura,
-            df.descripcion AS descripciondetalle,
-            df.preciounitario AS preciounitariodetalle,
-            df.cantidad AS cantidaddetalle
-        FROM Pagos p
-        INNER JOIN Facturas f ON p.facturaid = f.facturaid
-        LEFT JOIN DetallesFactura df ON f.facturaid = df.facturaid";
+ // Consulta SQL para obtener datos de pagos desde la vista
+ $sql = "SELECT * FROM vista_pagos_con_detalles";
 
-// Preparar y ejecutar la consulta
-$stmt = $db->query($sql);
-$pagos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+ // Preparar y ejecutar la consulta
+ $stmt = $db->query($sql);
+ $pagos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Aquí puedes procesar o mostrar los datos obtenidos
 // Por ejemplo, mostrar en una tabla HTML o procesar los datos para alguna otra lógica
 ?>

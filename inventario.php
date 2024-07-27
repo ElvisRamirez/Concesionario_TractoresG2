@@ -2,17 +2,12 @@
 // Incluir el archivo de conexión
 include 'conexion.php';
 
-// Consulta SQL para obtener datos del inventario
-$sql = "SELECT mt.Modelo, p.Nombre AS Proveedor, i.FechaIngreso, i.Cantidad, i.PrecioUnitario, i.PrecioCompra
-        FROM Inventario i
-        JOIN Tractores t ON i.TractorID = t.TractorID
-        JOIN ModelosTractores mt ON t.ModeloID = mt.ModeloID
-        JOIN Proveedores p ON i.ProveedorID = p.ProveedorID";
+  // Consulta SQL para obtener datos del inventario desde la vista
+  $sql = "SELECT * FROM vista_inventario";
 
-// Preparar y ejecutar la consulta
-$stmt = $db->query($sql);
-$inventario = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+  // Preparar y ejecutar la consulta
+  $stmt = $db->query($sql);
+  $inventario = $stmt->fetchAll(PDO::FETCH_ASSOC);
 // Aquí puedes procesar o mostrar los datos obtenidos
 // Por ejemplo, mostrar en una tabla HTML o procesar los datos para alguna otra lógica
 ?>

@@ -2,40 +2,20 @@
 // Incluir el archivo de conexión
 include 'conexion.php';
 
-// Consulta SQL para obtener datos de facturas con sus detalles
-$sql = "SELECT
-            f.FacturaID,
-            f.FechaFactura,
-            c.Nombre AS NombreCliente,
-            c.Apellido AS ApellidoCliente,
-            e.Nombre AS NombreEmpleado,
-            e.Apellido AS ApellidoEmpleado,
-            df.Descripcion AS DescripcionDetalle,
-            df.PrecioUnitario AS PrecioUnitarioDetalle,
-            df.Cantidad AS CantidadDetalle
-        FROM Facturas f
-        INNER JOIN Clientes c ON f.ClienteID = c.ClienteID
-        INNER JOIN Empleados e ON f.EmpleadoID = e.EmpleadoID
-        INNER JOIN DetallesFactura df ON f.FacturaID = df.FacturaID
-        ORDER BY f.FacturaID";
+
+// Consulta utilizando la vista para obtener datos de facturas con detalles
+$sql = "SELECT * FROM VistaFacturasDetalles";
 
 // Preparar y ejecutar la consulta
 $stmt = $db->query($sql);
 $facturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Consulta para obtener los detalles de los alquileres
-$queryDetalles = $db->prepare("
-SELECT a.AlquilerID, c.Nombre AS Cliente, e.Nombre AS Empleado, m.Marca, m.Modelo, da.PrecioUnitario, da.Cantidad, a.FechaInicio, a.FechaFin, a.TotalAlquiler
-FROM Alquileres a
-INNER JOIN Clientes c ON a.ClienteID = c.ClienteID
-INNER JOIN Empleados e ON a.EmpleadoID = e.EmpleadoID
-INNER JOIN DetallesAlquiler da ON a.AlquilerID = da.AlquilerID
-INNER JOIN Tractores t ON da.TractorID = t.TractorID
-INNER JOIN ModelosTractores m ON t.ModeloID = m.ModeloID
-");
+// Consulta utilizando la vista para obtener los detalles de los alquileres
+$queryDetalles = $db->prepare("SELECT * FROM VistaDetallesAlquileres");
 
 $queryDetalles->execute();
 $alquileres = $queryDetalles->fetchAll(PDO::FETCH_ASSOC);
+
 ?>
 
 <!DOCTYPE html>

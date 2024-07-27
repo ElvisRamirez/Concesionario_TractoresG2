@@ -131,10 +131,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Función para obtener tractores disponibles con modelo y marca
 function obtenerTractoresDisponibles($db) {
     $query = $db->prepare("
-        SELECT t.TractorID, m.Marca, m.Modelo
-        FROM Tractores t
-        INNER JOIN ModelosTractores m ON t.ModeloID = m.ModeloID
-        WHERE t.Estado = 'disponible'
+        SELECT TractorID, Marca, Modelo
+        FROM VistaTractoresDisponibles
     ");
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
