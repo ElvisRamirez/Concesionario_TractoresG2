@@ -8,7 +8,7 @@ include 'conexion.php';
  // Preparar y ejecutar la consulta
  $stmt = $db->query($sql);
  $tractores = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Invitado'; // Valor por defecto si no está definido
 ?>
 
 
@@ -80,6 +80,7 @@ include 'conexion.php';
 <body>
 
 <div class="sidenav" id="mySidenav">
+        <a  href="#"><i class="fas fa-user mr-2" >  </i><?php echo htmlspecialchars($username); ?></a>
         <a href="index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
         <a href="Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
         <a href="Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
