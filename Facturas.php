@@ -1,38 +1,29 @@
 <?php
-// Configuración de conexión a la base de datos
-//$dbHost = '10.241.0.57';
-$dbHost = '10.241.0.44';
-//$dbHost = '192.168.10.10';
-$dbName = 'Concesionario_Tractores';
-$dbUser = 'postgres';
-$dbPass = '593';
+// Incluir el archivo de conexión
+include 'conexion.php';
 
-try {
-    // Establecer conexión PDO
-    $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Consulta SQL para obtener datos de facturas con sus detalles
+$sql = "SELECT
+            f.FacturaID,
+            f.FechaFactura,
+            c.Nombre AS NombreCliente,
+            c.Apellido AS ApellidoCliente,
+            e.Nombre AS NombreEmpleado,
+            e.Apellido AS ApellidoEmpleado,
+            df.Descripcion AS DescripcionDetalle,
+            df.PrecioUnitario AS PrecioUnitarioDetalle,
+            df.Cantidad AS CantidadDetalle
+        FROM Facturas f
+        INNER JOIN Clientes c ON f.ClienteID = c.ClienteID
+        INNER JOIN Empleados e ON f.EmpleadoID = e.EmpleadoID
+        INNER JOIN DetallesFactura df ON f.FacturaID = df.FacturaID
+        ORDER BY f.FacturaID";
 
-    // Consulta SQL para obtener datos de facturas con sus detalles
-    $sql = "SELECT
-                f.FacturaID,
-                f.FechaFactura,
-                c.Nombre AS NombreCliente,
-                c.Apellido AS ApellidoCliente,
-                e.Nombre AS NombreEmpleado,
-                e.Apellido AS ApellidoEmpleado,
-                df.Descripcion AS DescripcionDetalle,
-                df.PrecioUnitario AS PrecioUnitarioDetalle,
-                df.Cantidad AS CantidadDetalle
-            FROM Facturas f
-            INNER JOIN Clientes c ON f.ClienteID = c.ClienteID
-            INNER JOIN Empleados e ON f.EmpleadoID = e.EmpleadoID
-            INNER JOIN DetallesFactura df ON f.FacturaID = df.FacturaID
-            ORDER BY f.FacturaID";
+// Preparar y ejecutar la consulta
+$stmt = $db->query($sql);
+$facturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Preparar y ejecutar la consulta
-    $stmt = $db->query($sql);
-    $facturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    // Consulta para obtener los detalles de los alquileres
+// Consulta para obtener los detalles de los alquileres
 $queryDetalles = $db->prepare("
 SELECT a.AlquilerID, c.Nombre AS Cliente, e.Nombre AS Empleado, m.Marca, m.Modelo, da.PrecioUnitario, da.Cantidad, a.FechaInicio, a.FechaFin, a.TotalAlquiler
 FROM Alquileres a
@@ -43,14 +34,8 @@ INNER JOIN Tractores t ON da.TractorID = t.TractorID
 INNER JOIN ModelosTractores m ON t.ModeloID = m.ModeloID
 ");
 
-
 $queryDetalles->execute();
 $alquileres = $queryDetalles->fetchAll(PDO::FETCH_ASSOC);
-
-
-} catch (PDOException $e) {
-    die("Error al conectar a la base de datos: " . $e->getMessage());
-}
 ?>
 
 <!DOCTYPE html>

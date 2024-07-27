@@ -1,17 +1,5 @@
 <?php
-// Conexión a la base de datos (misma configuración que tractor.php)
-$dbHost = '10.241.0.44';
-$dbName = 'Concesionario_Tractores';
-$dbUser = 'postgres';
-$dbPass = '593';
-
-try {
-    $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Error al conectar a la base de datos: " . $e->getMessage());
-}
-
+include "conexion.php";
 // Verificar si se ha enviado un ID válido
 if (!isset($_GET['tractorID']) || empty($_GET['tractorID'])) {
     die("ID de tractor no proporcionado.");
@@ -102,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
 
 <div class="sidenav" id="mySidenav">
-        <a href="../index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
+        <a href="index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
         <a href="../Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
         <a href="../Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
         <a href="../Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>

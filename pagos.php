@@ -1,40 +1,31 @@
 <?php
-//$dbHost = '10.241.0.57';
-$dbHost = '10.241.0.44';
-//$dbHost = '192.168.10.10';
-$dbName = 'Concesionario_Tractores';
-$dbUser = 'postgres';
-$dbPass = '593';
+// Incluir el archivo de conexión
+include 'conexion.php';
 
-try {
-    // Establecer conexión PDO
-    $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Consulta SQL para obtener datos de pagos con detalles de factura
+$sql = "SELECT
+            p.pagoid,
+            p.facturaid,
+            p.formapago,
+            p.fechapago,
+            p.montopago,
+            f.fechafactura,
+            f.totalfactura,
+            df.descripcion AS descripciondetalle,
+            df.preciounitario AS preciounitariodetalle,
+            df.cantidad AS cantidaddetalle
+        FROM Pagos p
+        INNER JOIN Facturas f ON p.facturaid = f.facturaid
+        LEFT JOIN DetallesFactura df ON f.facturaid = df.facturaid";
 
-    // Consulta SQL para obtener datos de pagos con detalles de factura
-    $sql = "SELECT
-                p.pagoid,
-                p.facturaid,
-                p.formapago,
-                p.fechapago,
-                p.montopago,
-                f.fechafactura,
-                f.totalfactura,
-                df.descripcion AS descripciondetalle,
-                df.preciounitario AS preciounitariodetalle,
-                df.cantidad AS cantidaddetalle
-            FROM Pagos p
-            INNER JOIN Facturas f ON p.facturaid = f.facturaid
-            LEFT JOIN DetallesFactura df ON f.facturaid = df.facturaid";
+// Preparar y ejecutar la consulta
+$stmt = $db->query($sql);
+$pagos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Preparar y ejecutar la consulta
-    $stmt = $db->query($sql);
-    $pagos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    die("Error al conectar a la base de datos: " . $e->getMessage());
-}
+// Aquí puedes procesar o mostrar los datos obtenidos
+// Por ejemplo, mostrar en una tabla HTML o procesar los datos para alguna otra lógica
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">

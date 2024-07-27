@@ -1,31 +1,22 @@
 <?php
-//$dbHost = '10.241.0.57';
-$dbHost = '10.241.0.44';
-//$dbHost = '192.168.10.10';
-$dbName = 'Concesionario_Tractores';
-$dbUser = 'postgres';
-$dbPass = '593';
+// Incluir el archivo de conexión
+include 'conexion.php';
 
-try {
-    // Establecer conexión PDO
-    $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+// Consulta SQL para obtener datos del inventario
+$sql = "SELECT mt.Modelo, p.Nombre AS Proveedor, i.FechaIngreso, i.Cantidad, i.PrecioUnitario, i.PrecioCompra
+        FROM Inventario i
+        JOIN Tractores t ON i.TractorID = t.TractorID
+        JOIN ModelosTractores mt ON t.ModeloID = mt.ModeloID
+        JOIN Proveedores p ON i.ProveedorID = p.ProveedorID";
 
-    // Consulta SQL corregida para obtener datos del inventario
-    $sql = "SELECT mt.Modelo, p.Nombre AS Proveedor, i.FechaIngreso, i.Cantidad, i.PrecioUnitario, i.PrecioCompra
-            FROM Inventario i
-            JOIN Tractores t ON i.TractorID = t.TractorID
-            JOIN ModelosTractores mt ON t.ModeloID = mt.ModeloID
-            JOIN Proveedores p ON i.ProveedorID = p.ProveedorID";
+// Preparar y ejecutar la consulta
+$stmt = $db->query($sql);
+$inventario = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Preparar y ejecutar la consulta
-    $stmt = $db->query($sql);
-    $inventario = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    die("Error al conectar a la base de datos: " . $e->getMessage());
-}
+// Aquí puedes procesar o mostrar los datos obtenidos
+// Por ejemplo, mostrar en una tabla HTML o procesar los datos para alguna otra lógica
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">

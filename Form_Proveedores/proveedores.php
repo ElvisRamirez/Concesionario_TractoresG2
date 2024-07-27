@@ -1,18 +1,5 @@
 <?php
-// Conexión a la base de datos
-//$dbHost = '10.241.0.57';
-$dbHost = '10.241.0.44';
-//$dbHost = '192.168.10.10';
-$dbName = 'Concesionario_Tractores';
-$dbUser = 'postgres';
-$dbPass = '593';
-
-try {
-    $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-} catch (PDOException $e) {
-    die("Error al conectar a la base de datos: " . $e->getMessage());
-}
-
+include "../conexion.php";
 // Función para obtener todos los proveedores ordenados por ID descendente
 function obtenerProveedores($db) {
     $query = $db->query("SELECT * FROM Proveedores ORDER BY ProveedorID ASC");
