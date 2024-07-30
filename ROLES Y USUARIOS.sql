@@ -32,11 +32,20 @@ GRANT USAGE ON SCHEMA public TO empleados;
 
 
 --USUARIOS
+
+-- Revocar el permiso de SELECT en la tabla pagos para el rol Usuarios
+REVOKE SELECT ON pagos FROM Usuarios;
+-- Revocar el permiso de SELECT en la vista vista_pagos_con_detalles para el rol Usuarios
+REVOKE SELECT ON vista_pagos_con_detalles FROM Usuarios;
+
 GRANT SELECT ON  ultimos_tractores_disponibles TO Usuarios;
 -- Revocar permisos de lectura en la tabla Clientes
 REVOKE SELECT ON TABLE Clientes FROM Usuarios;
 -- Revocar permisos de inserción, actualización y eliminación en la tabla Clientes
 REVOKE INSERT, UPDATE, DELETE ON TABLE Clientes FROM Usuarios;
+-- Revocar permisos del rol `Usuarios` en la vista
+REVOKE SELECT ON vista_pagos_con_detalles FROM Usuarios;
+
 
 
 -- Revocar permisos de lectura en las tablas
