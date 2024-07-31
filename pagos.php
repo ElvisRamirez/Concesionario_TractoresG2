@@ -1,40 +1,17 @@
 <?php
-//$dbHost = '10.241.0.57';
-$dbHost = '10.241.0.44';
-//$dbHost = '192.168.10.10';
-$dbName = 'Concesionario_Tractores';
-$dbUser = 'postgres';
-$dbPass = '593';
+// Incluir el archivo de conexión
+include 'conexion.php';
+include "../permisos.php"; 
+ // Consulta SQL para obtener datos de pagos desde la vista
+ $sql = "SELECT * FROM vista_pagos_con_detalles";
 
-try {
-    // Establecer conexión PDO
-    $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Consulta SQL para obtener datos de pagos con detalles de factura
-    $sql = "SELECT
-                p.pagoid,
-                p.facturaid,
-                p.formapago,
-                p.fechapago,
-                p.montopago,
-                f.fechafactura,
-                f.totalfactura,
-                df.descripcion AS descripciondetalle,
-                df.preciounitario AS preciounitariodetalle,
-                df.cantidad AS cantidaddetalle
-            FROM Pagos p
-            INNER JOIN Facturas f ON p.facturaid = f.facturaid
-            LEFT JOIN DetallesFactura df ON f.facturaid = df.facturaid";
-
-    // Preparar y ejecutar la consulta
-    $stmt = $db->query($sql);
-    $pagos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    die("Error al conectar a la base de datos: " . $e->getMessage());
-}
+ // Preparar y ejecutar la consulta
+ $stmt = $db->query($sql);
+ $pagos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// Aquí puedes procesar o mostrar los datos obtenidos
+// Por ejemplo, mostrar en una tabla HTML o procesar los datos para alguna otra lógica
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -101,8 +78,9 @@ try {
 <body>
 
 <div class="sidenav" id="mySidenav">
+<a  href="#"><i class="fas fa-user mr-2" >  </i><?php echo htmlspecialchars($username); ?></a>
         <a href="../index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
-        <a href="../Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
+        <a href="Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
         <a href="../Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
         <a href="../Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
         <a href="tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>

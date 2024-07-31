@@ -1,18 +1,6 @@
 <?php
-// Conexión a la base de datos
-//$dbHost = '10.241.0.57';
-$dbHost = '10.241.0.44';
-
-$dbName = 'Concesionario_Tractores';
-$dbUser = 'postgres';
-$dbPass = '593';
-try {
-    $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Para mostrar errores de PDO
-} catch (PDOException $e) {
-    die("Error al conectar a la base de datos: " . $e->getMessage());
-}
-
+include "conexion.php";
+include "../permisos.php"; 
 $mensajeError = ""; // Variable para almacenar mensajes de error
 $mensajeAlquiler = ""; // Variable para almacenar mensajes de éxito
 
@@ -144,10 +132,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 // Función para obtener tractores disponibles con modelo y marca
 function obtenerTractoresDisponibles($db) {
     $query = $db->prepare("
-        SELECT t.TractorID, m.Marca, m.Modelo
-        FROM Tractores t
-        INNER JOIN ModelosTractores m ON t.ModeloID = m.ModeloID
-        WHERE t.Estado = 'disponible'
+        SELECT TractorID, Marca, Modelo
+        FROM VistaTractoresDisponibles
     ");
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);

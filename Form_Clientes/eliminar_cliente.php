@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // Conexión a la base de datos
 
 //$dbHost = '10.241.0.57';
@@ -15,6 +16,10 @@ try {
     die("Error al conectar a la base de datos: " . $e->getMessage());
 }
 
+=======
+include "../conexion.php";
+include "../permisos.php"; 
+>>>>>>> b964678eef722a98cc3f7c5f82fbdc9559e0064f
 // Verificar si se ha enviado un ID válido
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     die("ID de cliente no proporcionado.");

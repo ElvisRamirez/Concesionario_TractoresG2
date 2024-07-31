@@ -1,34 +1,22 @@
 <?php
+<<<<<<< HEAD
 //HOLA QUE HACE
 // Conexión a la base de datos
 //$dbHost = '10.241.0.57';
 $dbHost = '192.168.10.10';
+=======
+// Incluir el archivo de conexión
+include 'conexion.php';
+>>>>>>> b964678eef722a98cc3f7c5f82fbdc9559e0064f
 
-$dbName = 'Concesionario_Tractores';
-$dbUser = 'postgres';
-$dbPass = '593';
+ // Consulta SQL para obtener los últimos tractores disponibles desde la vista
+ $sql = "SELECT * FROM ultimos_tractores_disponibles";
 
-try {
-    $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    
-    // Consulta SQL para obtener los últimos tractores disponibles
-    $sql = "SELECT t.Imagen, mt.Marca, mt.Modelo, t.Año, t.Estado, mt.Descripcion AS DescripcionTractor
-            FROM Tractores t
-            INNER JOIN ModelosTractores mt ON t.ModeloID = mt.ModeloID
-            WHERE t.Estado = 'disponible'
-            ORDER BY t.TractorID DESC
-            LIMIT 3"; // Obtener los últimos 3 tractores disponibles
-
-    $stmt = $db->query($sql);
-    $tractores = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    die("Error al conectar a la base de datos: " . $e->getMessage());
-}
+ // Preparar y ejecutar la consulta
+ $stmt = $db->query($sql);
+ $tractores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Invitado'; // Valor por defecto si no está definido
 ?>
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -96,6 +84,7 @@ try {
 <body>
 
 <div class="sidenav" id="mySidenav">
+        <a  href="#"><i class="fas fa-user mr-2" >  </i><?php echo htmlspecialchars($username); ?></a>
         <a href="index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
         <a href="Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
         <a href="Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>

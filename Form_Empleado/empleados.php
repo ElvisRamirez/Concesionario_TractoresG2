@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 // Conexión a la base de datos
 //$dbHost = '10.241.0.57';
 $dbHost = '192.168.1.10';
@@ -14,6 +15,10 @@ try {
     die("Error al conectar a la base de datos: " . $e->getMessage());
 }
 
+=======
+include "../conexion.php";
+include "../permisos.php"; 
+>>>>>>> b964678eef722a98cc3f7c5f82fbdc9559e0064f
 // Función para obtener todos los empleados
 function obtenerEmpleados($db) {
     $query = $db->query("SELECT * FROM Empleados ORDER BY empleadoid ASC");
