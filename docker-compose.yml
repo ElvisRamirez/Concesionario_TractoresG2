@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 services:
   db:
@@ -15,7 +15,7 @@ services:
   php:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./php/Dockerfile
     volumes:
       - ./src:/var/www/html
     ports:
@@ -33,9 +33,9 @@ services:
   grafana:
     image: grafana/grafana
     ports:
-      - "3001:3000"
+      - "3000:3000"
     volumes:
-      - grafana-storage:/var/lib/grafana
+      - grafana_data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
