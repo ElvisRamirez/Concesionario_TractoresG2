@@ -1,5 +1,6 @@
 <?php
 include "../conexion.php";
+include "../permisos.php"; 
 // Función para obtener el ID, nombre y apellido por cédula de cliente
 function obtenerClientePorCedula($db, $cedula) {
     $query = $db->prepare("SELECT ClienteID, Nombre, Apellido FROM Clientes WHERE Cedula = ?");

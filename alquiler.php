@@ -1,5 +1,6 @@
 <?php
 include "conexion.php";
+include "../permisos.php"; 
 $mensajeError = ""; // Variable para almacenar mensajes de error
 $mensajeAlquiler = ""; // Variable para almacenar mensajes de éxito
 

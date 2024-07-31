@@ -1,6 +1,6 @@
 <?php
 include "../conexion.php";
-
+include "../permisos.php"; 
 // Verificar si se ha pasado el ID del empleado a eliminar
 if (isset($_GET['id'])) {
     $empleadoID = $_GET['id'];

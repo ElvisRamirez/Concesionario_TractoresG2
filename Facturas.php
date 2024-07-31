@@ -1,7 +1,7 @@
 <?php
 // Incluir el archivo de conexión
 include 'conexion.php';
-
+include "../permisos.php"; 
 
 // Consulta utilizando la vista para obtener datos de facturas con detalles
 $sql = "SELECT * FROM VistaFacturasDetalles";

@@ -1,6 +1,6 @@
 <?php
 include "../conexion.php";
-
+include "../permisos.php"; 
 // Función para obtener datos de un empleado por su ID
 function obtenerEmpleadoPorID($db, $empleadoID) {
     $query = $db->prepare("SELECT * FROM Empleados WHERE empleadoid = ?");

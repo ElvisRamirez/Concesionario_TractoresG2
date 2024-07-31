@@ -10,9 +10,6 @@ include 'conexion.php';
  $tractores = $stmt->fetchAll(PDO::FETCH_ASSOC);
 $username = isset($_SESSION['username']) ? $_SESSION['username'] : 'Invitado'; // Valor por defecto si no está definido
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>

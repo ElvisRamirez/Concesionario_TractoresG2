@@ -1,5 +1,6 @@
 <?php
 include "../conexion.php";
+include "../permisos.php"; 
 // Verificar si se ha enviado un ID válido
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     die("ID de proveedor no proporcionado.");

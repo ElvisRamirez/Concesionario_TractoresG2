@@ -1,6 +1,6 @@
 <?php
 include "../conexion.php";
-
+include "../permisos.php"; 
 // Función para obtener todos los clientes
 function obtenerClientes($db) {
     $query = $db->query("SELECT * FROM Clientes");

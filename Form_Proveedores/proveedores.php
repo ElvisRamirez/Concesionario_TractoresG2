@@ -1,5 +1,6 @@
 <?php
 include "../conexion.php";
+include "../permisos.php"; 
 // Función para obtener todos los proveedores ordenados por ID descendente
 function obtenerProveedores($db) {
     $query = $db->query("SELECT * FROM Proveedores ORDER BY ProveedorID ASC");

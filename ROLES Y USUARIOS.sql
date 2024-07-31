@@ -76,3 +76,21 @@ REVOKE INSERT, UPDATE, DELETE ON TABLE Facturas FROM Usuarios;
 REVOKE INSERT, UPDATE, DELETE ON TABLE DetallesFactura FROM Usuarios;
 REVOKE INSERT, UPDATE, DELETE ON TABLE Pagos FROM Usuarios;
 REVOKE INSERT, UPDATE, DELETE ON TABLE Inventario FROM Usuarios;
+SELECT datname FROM pg_database WHERE datname = 'concesionario_tractores';
+
+-- Otorgar todos los permisos sobre todas las tablas existentes
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO postgres;
+
+-- Otorgar todos los permisos sobre todas las secuencias existentes
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO postgres;
+
+-- Otorgar todos los permisos sobre todas las funciones existentes
+GRANT ALL PRIVILEGES ON ALL FUNCTIONS IN SCHEMA public TO postgres;
+-- Otorgar permisos por defecto en tablas futuras
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO postgres;
+
+-- Otorgar permisos por defecto en secuencias futuras
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO postgres;
+
+-- Otorgar permisos por defecto en funciones futuras
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO postgres;

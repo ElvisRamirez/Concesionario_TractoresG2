@@ -1,5 +1,7 @@
 <?php
 include "../conexion.php";
+
+include "../permisos.php"; 
 // Verificar si se ha enviado un ID válido
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     die("ID de cliente no proporcionado.");
@@ -46,6 +48,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </head>
 <style>
+    .permiso-denegado-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 1000;
+        }
+        .notification {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1050;
+            display: none;
+        }
+        .notification.show {
+            display: block;
+        }
    body {
             display: flex;
             justify-content: center;
@@ -105,6 +132,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="../pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
         <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
     </div>
+
+    
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">

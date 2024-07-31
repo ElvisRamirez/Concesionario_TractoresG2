@@ -1,5 +1,6 @@
 <?php
 include "../conexion.php";
+include "../permisos.php"; 
 // Función para obtener todos los empleados
 function obtenerEmpleados($db) {
     $query = $db->query("SELECT * FROM Empleados ORDER BY empleadoid ASC");

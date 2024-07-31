@@ -1,7 +1,7 @@
 <?php
 // Incluir el archivo de conexión
 include 'conexion.php';
-
+include "../permisos.php"; 
  // Consulta SQL para obtener datos de pagos desde la vista
  $sql = "SELECT * FROM vista_pagos_con_detalles";
 

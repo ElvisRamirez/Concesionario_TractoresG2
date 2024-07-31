@@ -22,4 +22,4 @@ try {
     die("Error al conectar a la base de datos: " . $e->getMessage());
 }
 
-
+// No se necesita redeclarar la función conectarBD() aquí si ya está en otro lugar
