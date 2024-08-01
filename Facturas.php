@@ -1,13 +1,6 @@
-<?php
-// Configuración de conexión a la base de datos
-//$dbHost = '10.241.0.57';
-$dbHost = '192.168.10.10';
-$dbName = 'Concesionario_Tractores';
-$dbUser = 'postgres';
-$dbPass = '593';
-// Incluir el archivopos de conexión
+
 include 'conexion.php';
-include "../permisos.php"; 
+include "permisos.php"; 
 
 // Consulta utilizando la vista para obtener datos de facturas con detalles
 $sql = "SELECT * FROM VistaFacturasDetalles";

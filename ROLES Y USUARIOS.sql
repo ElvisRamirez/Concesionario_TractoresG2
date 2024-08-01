@@ -92,5 +92,32 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON TABLES TO post
 -- Otorgar permisos por defecto en secuencias futuras
 ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON SEQUENCES TO postgres;
 
--- Otorgar permisos por defecto en funciones futuras
-ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL PRIVILEGES ON FUNCTIONS TO postgres;
+GRANT USAGE, CREATE ON SCHEMA public TO Administrador;
+
+
+
+
+SELECT r.rolname
+FROM pg_roles r
+JOIN pg_auth_members m ON r.oid = m.roleid
+JOIN pg_user u ON u.usesysid = m.member
+WHERE u.usename = 'admin1';
+
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Tractores TO admin1;
+GRANT SELECT, INSERT, DELETE ON TABLE Tractores TO admin1;
+GRANT SELECT, INSERT, DELETE ON TABLE Inventario TO admin1;
+GRANT SELECT ON TABLE ModelosTractores TO admin1;
+GRANT SELECT ON TABLE Proveedores TO admin1;
+GRANT USAGE ON SCHEMA public TO admin1;
+
+
+-- Ver permisos en tablas específicas
+SELECT *
+FROM pg_table_privileges
+WHERE grantee = 'Administrador';
+
+-- Ver roles y usuarios
+SELECT * FROM pg_roles;
+
+
