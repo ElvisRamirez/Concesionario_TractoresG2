@@ -5,7 +5,7 @@ $dbHost = '192.168.10.10';
 $dbName = 'Concesionario_Tractores';
 $dbUser = 'postgres';
 $dbPass = '593';
-// Incluir el archivo de conexión
+// Incluir el archivopos de conexión
 include 'conexion.php';
 include "../permisos.php"; 
 
