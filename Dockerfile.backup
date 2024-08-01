@@ -1,0 +1,26 @@
+FROM postgres:latest
+
+# Instalar herramientas necesarias
+RUN apt-get update && \
+    apt-get install -y openssh-client cron
+
+# Copiar el script de backup
+COPY backups/backup.sh /usr/local/bin/backup.sh
+RUN chmod +x /usr/local/bin/backup.sh
+
+# Configurar crontab
+COPY crontab /etc/cron.d/backup-cron
+RUN chmod 0644 /etc/cron.d/backup-cron
+RUN crontab /etc/cron.d/backup-cron
+
+# Crear directorio de backups
+RUN mkdir -p /backups
+
+# Copiar claves SSH
+COPY ./ssh /root/.ssh
+RUN chmod 600 /root/.ssh/id_ed25519 && \
+    chmod 644 /root/.ssh/id_ed25519.pub && \
+    chmod 644 /root/.ssh/known_hosts
+
+# Iniciar cron y mantener el contenedor en ejecución
+CMD ["cron", "-f"]
