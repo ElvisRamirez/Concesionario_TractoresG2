@@ -20,7 +20,7 @@ $password = $_POST['password'];
 
 // Verificar credenciales
 if (isset($credentials[$username]) && $credentials[$username]['password'] === $password) {
-    $_SESSION['dbHost'] = $credentials[$username]['192.168.10.10'];
+    $_SESSION['dbHost'] = $credentials[$username]['host'];
     $_SESSION['dbName'] = $credentials[$username]['dbname'];
     $_SESSION['dbUser'] = $credentials[$username]['user'];
     $_SESSION['dbPass'] = $credentials[$username]['password'];
