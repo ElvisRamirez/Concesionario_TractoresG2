@@ -1,6 +1,7 @@
 <?php
 include "conexion.php";
-include "../permisos.php"; 
+include "permisos.php"; 
+
 // Función para obtener todos los modelos de tractores
 function obtenerModelosTractores($db) {
     $query = $db->query("SELECT * FROM ModelosTractores ORDER BY Modelo");

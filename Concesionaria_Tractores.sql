@@ -131,10 +131,67 @@ CREATE TABLE Facturas (
     TotalFactura DECIMAL(10, 2) NOT NULL CHECK (TotalFactura >= 0),
     FOREIGN KEY (ClienteID) REFERENCES Clientes(ClienteID),
     FOREIGN KEY (EmpleadoID) REFERENCES Empleados(EmpleadoID)
-);
+)
 
+
+-- ///AQUI REVISA AS EL PASO A PASO
+	ALTER TABLE Facturas RENAME TO Facturas_old;
+    -- CREAS DE NUEVO LA TABLA
+CREATE TABLE Facturas (
+    FacturaID SERIAL,
+    ClienteID INT NOT NULL,
+    EmpleadoID INT NOT NULL,
+    FechaFactura DATE NOT NULL,
+    TotalFactura DECIMAL(10, 2) NOT NULL CHECK (TotalFactura >= 0),
+    FOREIGN KEY (ClienteID) REFERENCES Clientes(ClienteID),
+    FOREIGN KEY (EmpleadoID) REFERENCES Empleados(EmpleadoID),
+    PRIMARY KEY (FacturaID, FechaFactura)
+) PARTITION BY RANGE (FechaFactura);
+-- Eliminar las foreign keys
+ALTER TABLE DetallesFactura DROP CONSTRAINT detallesfactura_facturaid_fkey;
+ALTER TABLE Pagos DROP CONSTRAINT pagos_facturaid_fkey;
+
+-- Eliminar las vistas DESPUES DE LO DEMAS LAS VUELVES A CREAR 
+DROP VIEW IF EXISTS VistaFacturasDetalles;
+DROP VIEW IF EXISTS Vista_Pagos_Con_Detalles;
+-- CREAS LAS DEMAS TABLAS 
+CREATE TABLE Facturas_2024 PARTITION OF Facturas
+    FOR VALUES FROM ('2024-01-01') TO ('2025-01-01');
+CREATE TABLE Facturas_2025 PARTITION OF Facturas
+    FOR VALUES FROM ('2025-01-01') TO ('2026-01-01');
+
+CREATE TABLE Facturas_2026 PARTITION OF Facturas
+    FOR VALUES FROM ('2026-01-01') TO ('2027-01-01');
+
+CREATE TABLE Facturas_default PARTITION OF Facturas
+    DEFAULT;
+-- INSERTAS DE NUEVO
+INSERT INTO Facturas SELECT * FROM Facturas_old;
+
+-- Y ESTO ES PARA 
+SELECT MIN(FechaFactura), MAX(FechaFactura) FROM Facturas_old;
+
+
+
+-- Recrear los índices
 CREATE INDEX idx_facturas_cliente_id ON Facturas(ClienteID);
 CREATE INDEX idx_facturas_empleado_id ON Facturas(EmpleadoID);
+-- Actualizar la secuencia
+SELECT setval(pg_get_serial_sequence('Facturas', 'FacturaID'), 
+              (SELECT MAX(FacturaID) FROM Facturas));
+-- Recrear las foreign keys
+ALTER TABLE DetallesFactura 
+ADD CONSTRAINT detallesfactura_facturaid_fkey 
+FOREIGN KEY (FacturaID) REFERENCES Facturas(FacturaID);
+
+ALTER TABLE Pagos 
+ADD CONSTRAINT pagos_facturaid_fkey 
+FOREIGN KEY (FacturaID) REFERENCES Facturas(FacturaID);
+
+
+-- ELIMINAS LA OTRA
+DROP TABLE Facturas_old;
+
 
 CREATE TABLE DetallesFactura (
     DetalleFacturaID SERIAL PRIMARY KEY,
@@ -144,6 +201,9 @@ CREATE TABLE DetallesFactura (
     Cantidad INT NOT NULL CHECK (Cantidad > 0),
     FOREIGN KEY (FacturaID) REFERENCES Facturas(FacturaID)
 );
+
+
+
 
 CREATE INDEX idx_detalles_factura_factura_id ON DetallesFactura(FacturaID);
 select * from Pagos
@@ -174,3 +234,4 @@ CREATE TABLE Inventario (
 CREATE INDEX idx_inventario_tractor_id ON Inventario(TractorID);
 CREATE INDEX idx_inventario_proveedor_id ON Inventario(ProveedorID);
 
+select * from Facturas_2025

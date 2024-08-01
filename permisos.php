@@ -1,49 +1,47 @@
 <?php
 include_once "conexion.php";
 
-// Establece las credenciales del usuario actual
+// // Establece la sesión del usuario
+// // session_start();
+// $username = $_SESSION['username'] ?? null;
 
-// Conexión a la base de datos con las credenciales del usuario
-$credencialesUsuario = $credentials[$_SESSION['username']] ?? null;
-// Función para obtener los roles del usuario desde la base de datos
-function obtenerRolesUsuario($db) {
-    $roles = [];
-    $username = $_SESSION['username'];
+// if ($username === null) {
+//     echo "Usuario no autenticado.";
+//     exit;
+// }
+
+// // Función para obtener los roles del usuario desde la base de datos
+// function obtenerRolesUsuario($db, $username) {
+//     $roles = [];
     
-    $query = $db->prepare("
-        SELECT rolname
-        FROM pg_roles
-        WHERE rolname IN (
-            SELECT pg_roles.rolname
-            FROM pg_roles
-            JOIN pg_auth_members ON pg_roles.oid = pg_auth_members.roleid
-            JOIN pg_user ON pg_user.usesysid = pg_auth_members.member
-            WHERE pg_user.usename = :username
-        )
-    ");
-    $query->execute(['username' => $username]);
+//     // Utiliza una consulta preparada con parámetros
+//     $query = $db->prepare("
+//         SELECT r.rolname
+//         FROM pg_roles r
+//         JOIN pg_auth_members m ON r.oid = m.roleid
+//         JOIN pg_user u ON u.usesysid = m.member
+//         WHERE u.usename = :username
+//     ");
+//     $query->bindParam(':username', $username, PDO::PARAM_STR);
+//     $query->execute();
     
-    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-        $roles[] = $row['rolname'];
-    }
+//     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+//         $roles[] = $row['rolname'];
+//     }
     
-    return $roles;
-}
+//     return $roles;
+// }
 
 
-// Verificar si el usuario tiene un rol específico
-function tieneRol($rolesUsuario, $rolBuscado) {
-    return in_array($rolBuscado, $rolesUsuario);
-}
+// // Obtener los roles del usuario
+// $rolesUsuario = obtenerRolesUsuario($db, $username);
 
-// Obtener los roles del usuario
-$rolesUsuario = obtenerRolesUsuario($db);
+// // Ejemplo de verificación de permisos
+// if (!in_array('Administrador', $rolesUsuario)) {
+//     echo "<div class='permiso-denegado-overlay'>No tienes permiso para realizar esta acción.</div>";
+//     exit;
+// }
 
-// Ejemplo de verificación de permisos
-
-if (!tieneRol($rolesUsuario, 'Administrador')) {
-    echo "<div class='permiso-denegado-overlay'>No tienes permiso para realizar esta acción.</div>";
-    exit;
-}
-?>
-<
+// // Código para usuarios autorizados
+// echo "Bienvenido, tienes los permisos necesarios.";
+// ?>

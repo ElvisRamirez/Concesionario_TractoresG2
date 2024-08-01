@@ -1,12 +1,5 @@
 <?php
-//HOLA QUE HACE
-// Conexión a la base de datos
-//$dbHost = '10.241.0.57';
-//$dbHost = '192.168.10.10';
-// Incluir el archivo de conexión
-include 'conexion.php';
-//>>>>>>> b964678eef722a98cc3f7c5f82fbdc9559e0064f
-
+include "conexion.php";
  // Consulta SQL para obtener los últimos tractores disponibles desde la vista
  $sql = "SELECT * FROM ultimos_tractores_disponibles";
 
