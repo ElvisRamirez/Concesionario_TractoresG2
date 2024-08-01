@@ -6,10 +6,10 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Datos de conexión disponibles
 $credentials = [
-    'postgres' => ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'postgres', 'password' => '593'],
-    'usuario1'=> ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'usuario1', 'password' => 'usuario'],
-    'admin1' => ['host' =>'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'admin1', 'password' => 'admin'],
-    'empleado1'=> ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'empleado1', 'password' => 'empleado'],
+    'postgres' => ['host' => '192.168.10.10', 'dbname' => 'Concesionario_Tractores', 'user' => 'postgres', 'password' => '593'],
+    'usuario1'=> ['host' => '192.168.10.10', 'dbname' => 'Concesionario_Tractores', 'user' => 'usuario1', 'password' => 'usuario'],
+    'admin1' => ['host' =>'192.168.10.10', 'dbname' => 'Concesionario_Tractores', 'user' => 'admin1', 'password' => 'admin'],
+    'empleado1'=> ['host' => '192.168.10.10', 'dbname' => 'Concesionario_Tractores', 'user' => 'empleado1', 'password' => 'empleado'],
     
 ];
 
@@ -20,7 +20,7 @@ $password = $_POST['password'];
 
 // Verificar credenciales
 if (isset($credentials[$username]) && $credentials[$username]['password'] === $password) {
-    $_SESSION['dbHost'] = $credentials[$username]['host'];
+    $_SESSION['dbHost'] = $credentials[$username]['192.168.10.10'];
     $_SESSION['dbName'] = $credentials[$username]['dbname'];
     $_SESSION['dbUser'] = $credentials[$username]['user'];
     $_SESSION['dbPass'] = $credentials[$username]['password'];
