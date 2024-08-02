@@ -33,7 +33,7 @@ services:
   grafana:
     image: grafana/grafana
     ports:
-      - "3000:3000"
+      - "3500:3000"  # Cambiado aquí
     volumes:
       - grafana_data:/var/lib/grafana
     environment:
@@ -57,7 +57,8 @@ services:
       DATA_SOURCE_NAME: "postgresql://postgres:593@db:5432/Concesionario_Tractores?sslmode=disable"
     depends_on:
       - db
-backup:
+  
+  backup:
     build:
       context: .
       dockerfile: Dockerfile.backup
@@ -71,5 +72,6 @@ backup:
       - ./crontab:/etc/cron.d/backup-cron
     depends_on:
       - db
+
 volumes:
   grafana_data:
