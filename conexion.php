@@ -18,13 +18,21 @@ try {
     // Establecer conexión PDO
     $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Aquí puedes realizar otras operaciones si es necesario
 } catch (PDOException $e) {
-    die("Error al conectar a la base de datos: " . $e->getMessage());
-
-    
+    // Detectar el error específico de permisos
+    if ($e->getCode() === '42501') {
+        // Redirigir a error.php para errores de permisos
+        header('Location: error.php?error=permissions');
+        exit();
+    } else {
+        // Redirigir a error.php para otros errores
+        header('Location: error.php?error=general');
+        exit();
+    }
 }
+?>
 
 
-   // Mostrar el mensaje de error si ocurre una excepción
-  
-// No se necesita redeclarar la función conectarBD() aquí si ya está en otro lugar
+
