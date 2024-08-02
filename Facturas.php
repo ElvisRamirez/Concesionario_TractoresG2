@@ -1,4 +1,4 @@
-
+<?php
 include 'conexion.php';
 include "permisos.php"; 
 
