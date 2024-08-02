@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="../Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
         <a href="../pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
         <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
-        <a href="logout.php"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar sesión</a>
+        <a href="../logout.php"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar sesión</a>
     </div>
     <div class="card">
     <div class="card-body">

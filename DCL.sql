@@ -111,7 +111,8 @@ GRANT SELECT ON TABLE ModelosTractores TO admin1;
 GRANT SELECT ON TABLE Proveedores TO admin1;
 GRANT USAGE ON SCHEMA public TO admin1;
 
-
+-- Conceder permisos de uso de la base de datos
+GRANT USAGE ON SCHEMA public TO Administrador;
 -- Ver permisos en tablas específicas
 SELECT *
 FROM pg_table_privileges
@@ -121,3 +122,39 @@ WHERE grantee = 'Administrador';
 SELECT * FROM pg_roles;
 
 
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE Tractores TO Administrador;
+GRANT SELECT, INSERT, DELETE ON TABLE Tractores TO Administrador;
+GRANT SELECT, INSERT, DELETE ON TABLE Inventario TO Administrador;
+GRANT SELECT ON TABLE ModelosTractores TO Administrador;
+GRANT SELECT ON TABLE Proveedores TO Administrador;
+GRANT USAGE ON SCHEMA public TO Administrador;
+GRANT SELECT ON ultimos_tractores_disponibles TO Administrador;
+
+-- Conceder permisos de uso de la base de datos
+GRANT USAGE ON SCHEMA public TO Administrador;
+GRANT SELECT ON VistaTractoresDisponibles TO Administrador;
+GRANT SELECT ON VistaFacturasDetalles TO Administrador;
+GRANT SELECT ON VistaDetallesAlquileres TO Administrador;
+GRANT SELECT ON ultimos_tractores_disponibles TO Administrador;
+GRANT SELECT ON vista_inventario TO Administrador;
+GRANT SELECT ON vista_pagos_con_detalles TO Administrador;
+
+
+
+GRANT ALL PRIVILEGES ON TABLE Clientes TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE Empleados TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE Proveedores TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE ModelosTractores TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE Tractores TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE Ventas TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE DetallesVenta TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE Alquileres TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE DetallesAlquiler TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE Facturas TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE DetallesFactura TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE Pagos TO Administrador;
+GRANT ALL PRIVILEGES ON TABLE Inventario TO Administrador;
+
+
+-- Permiso de uso del esquema
+GRANT USAGE ON SCHEMA public TO Administrador;

@@ -1,6 +1,6 @@
 <?php
 include "conexion.php";
-include "../permisos.php"; 
+
 // Manejar operaciones CRUD
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST["registrarModelo"])) {
