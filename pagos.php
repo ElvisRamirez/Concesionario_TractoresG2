@@ -79,7 +79,7 @@ include 'conexion.php';
 
 <div class="sidenav" id="mySidenav">
 <a  href="#"><i class="fas fa-user mr-2" >  </i><?php echo htmlspecialchars($username); ?></a>
-        <a href="../index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
+        <a href="index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
         <a href="Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
         <a href="Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
         <a href="../Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
@@ -89,6 +89,7 @@ include 'conexion.php';
         <a href="Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
         <a href="pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
         <a href="inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
+        <a href="logout.php"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar sesión</a>
     </div>
     <div class="container">
         <h2 class="mt-4 mb-4">Lista de Pagos</h2>
