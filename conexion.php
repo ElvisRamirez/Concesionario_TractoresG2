@@ -20,6 +20,11 @@ try {
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     die("Error al conectar a la base de datos: " . $e->getMessage());
+
+    
 }
 
+
+   // Mostrar el mensaje de error si ocurre una excepción
+  
 // No se necesita redeclarar la función conectarBD() aquí si ya está en otro lugar
