@@ -5,14 +5,6 @@ if (session_status() == PHP_SESSION_NONE) {
 
 
 // Datos de conexión disponibles
-$credentials = [
-    'postgres' => ['host' => '10.241.0.67', 'dbname' => 'Concesionario_Tractores', 'user' => 'postgres', 'password' => '593'],
-    'usuario1'=> ['host' => '10.241.0.67', 'dbname' => 'Concesionario_Tractores', 'user' => 'usuario1', 'password' => 'usuario'],
-    'admin1' => ['host' =>'10.241.0.67', 'dbname' => 'Concesionario_Tractores', 'user' => 'admin1', 'password' => 'admin'],
-    'empleado1'=> ['host' => '10.241.0.67', 'dbname' => 'Concesionario_Tractores', 'user' => 'empleado1', 'password' => 'empleado'],
-    
-];
-
 
 // Recoger datos del formulario
 $username = $_POST['username'];
