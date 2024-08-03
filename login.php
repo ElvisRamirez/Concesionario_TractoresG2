@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,0" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Login</title>  
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,600,0,0" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"   rel="stylesheet">
     <style>
         * {
-            box-sizing: border-box;
+            box-sizing:
+                border-box;
             margin: 0;
             padding: 0;
         }
@@ -24,11 +25,11 @@
         body {
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content:
+                center;
             background-size: cover;
             font-family: 'Euclid Circular A', sans-serif;
             height: 100vh;
-            margin: 0;
         }
 
         .login-wrapper {
@@ -59,6 +60,7 @@
         .form-group {
             margin-bottom: 20px;
             text-align: left;
+            position: relative;
         }
 
         .form-group label {
@@ -70,7 +72,7 @@
         .form-control {
             width: 100%;
             height: 50px;
-            padding: 0 20px;
+            padding: 0 20px 0 15px;
             font-size: 16px;
             border: 2px solid #ced4da;
             border-radius: 8px;
@@ -81,14 +83,12 @@
 
         .form-control:focus {
             border-color: #367c2b;
-            ;
         }
 
         .btn-primary {
             width: 100%;
             height: 50px;
             background-color: #367c2b;
-            ;
             border: none;
             color: #f9f9f9;
             font-weight: 600;
@@ -98,15 +98,13 @@
         }
 
         .btn-primary:hover {
-            background-color: #367c2b;
-            ;
+            background-color: #2e6c28;
         }
 
         .forgot-credentials {
             display: block;
             margin-top: 12px;
             color: #367c2b;
-            ;
             font-size: 16px;
             text-decoration: none;
         }
@@ -121,7 +119,12 @@
             width: 50%;
             height: auto;
             max-width: 600px;
-            /* Opcional: Limita el ancho máximo de la imagen */
+        }
+
+        /* Password Toggle Styles */
+        .password-container {
+            display: flex;
+            align-items: center;
         }
     </style>
 </head>
@@ -133,12 +136,13 @@
             <h2>Iniciar Sesión</h2>
             <form action="login_process.php" method="post" class="login-form">
                 <div class="form-group">
-                    <label for="username">Nombre de Usuario</label>
+                    <label for="username"><i class="fas fa-user"></i> Usuario</label>
                     <input type="text" class="form-control" id="username" name="username" required>
                 </div>
+
                 <div class="form-group">
-                    <label for="password">Contraseña</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
+                    <label for="password"><i class="fas fa-lock"></i> Contraseña</label>
+                    <input type="password" class="form-control" id="password" name="password"   required>
                 </div>
                 <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
             </form>
