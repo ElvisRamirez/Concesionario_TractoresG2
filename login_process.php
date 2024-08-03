@@ -1,4 +1,8 @@
 <?php
+// Habilitar reporte de errores
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
@@ -6,11 +10,11 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Datos de conexión disponibles
 $credentials = [
-    'postgres' => ['host' => '192.168.10.10', 'dbname' => 'Concesionario_Tractores', 'user' => 'postgres', 'password' => '593'],
-    'usuario1'=> ['host' => '192.168.10.10', 'dbname' => 'Concesionario_Tractores', 'user' => 'usuario1', 'password' => 'usuario'],
-    'admin1' => ['host' =>'192.168.10.10', 'dbname' => 'Concesionario_Tractores', 'user' => 'admin1', 'password' => 'admin'],
-    'empleado1'=> ['host' => '192.168.10.10', 'dbname' => 'Concesionario_Tractores', 'user' => 'empleado1', 'password' => 'empleado'],
-    
+    'postgres' => ['host' => '10.241.0.67', 'dbname' => 'Concesionario_Tractores', 'user' => 'postgres', 'password' => '593'],
+    'usuario1'=> ['host' => '10.241.0.67', 'dbname' => 'Concesionario_Tractores', 'user' => 'usuario1', 'password' => 'usuario'],
+    'admin1' => ['host' =>'10.241.0.67', 'dbname' => 'Concesionario_Tractores', 'user' => 'admin1', 'password' => 'admin'],
+    'empleado1'=> ['host' => '10.241.0.67', 'dbname' => 'Concesionario_Tractores', 'user' => 'empleado1', 'password' => 'empleado'],
+
 ];
 
 

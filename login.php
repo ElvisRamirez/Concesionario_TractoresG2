@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,8 @@
             padding: 0;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
             width: 100%;
         }
@@ -37,7 +39,7 @@
             max-width: 1200px;
         }
 
-        .login-container {  
+        .login-container {
             width: 90%;
             max-width: 380px;
             padding: 40px 30px;
@@ -45,7 +47,7 @@
             background: rgba(255, 255, 255, 0.9);
             color: #161616;
             text-align: center;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
         .login-container h2 {
@@ -78,13 +80,15 @@
         }
 
         .form-control:focus {
-            border-color: #157ae1;
+            border-color: #367c2b;
+            ;
         }
 
         .btn-primary {
             width: 100%;
             height: 50px;
-            background-color: #157ae1;
+            background-color: #367c2b;
+            ;
             border: none;
             color: #f9f9f9;
             font-weight: 600;
@@ -94,13 +98,15 @@
         }
 
         .btn-primary:hover {
-            background-color: #0056b3;
+            background-color: #367c2b;
+            ;
         }
 
         .forgot-credentials {
             display: block;
             margin-top: 12px;
-            color: #157ae1;
+            color: #367c2b;
+            ;
             font-size: 16px;
             text-decoration: none;
         }
@@ -114,10 +120,12 @@
             margin-left: 10px;
             width: 50%;
             height: auto;
-            max-width: 600px; /* Opcional: Limita el ancho máximo de la imagen */
+            max-width: 600px;
+            /* Opcional: Limita el ancho máximo de la imagen */
         }
     </style>
 </head>
+
 <body>
     <div class="login-wrapper">
         <img src="https://www.deere.com/assets/images/region-3/products/tractors/heavy-tractors/tractor-8270r-estudio.png" alt="Tractor Image" class="tractor-image">
@@ -133,8 +141,8 @@
                     <input type="password" class="form-control" id="password" name="password" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-        
             </form>
+
         </div>
     </div>
     <!-- Scripts de Bootstrap -->
@@ -142,4 +150,5 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
