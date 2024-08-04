@@ -19,7 +19,7 @@ try {
                 Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'No tienes permisos para ver las Factura!',
+                    text: 'No tienes permisos para ver las Pagos!',
                     willClose: () => {
                         window.location.href = 'http://localhost:3000/index.php'; // Cambia '/' por la URL de tu página principal
                     }
