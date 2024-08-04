@@ -13,7 +13,7 @@ include_once "conexion.php";
 // // Función para obtener los roles del usuario desde la base de datos
 // function obtenerRolesUsuario($db, $username) {
 //     $roles = [];
-    
+
 //     // Utiliza una consulta preparada con parámetros
 //     $query = $db->prepare("
 //         SELECT r.rolname
@@ -24,11 +24,11 @@ include_once "conexion.php";
 //     ");
 //     $query->bindParam(':username', $username, PDO::PARAM_STR);
 //     $query->execute();
-    
+
 //     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
 //         $roles[] = $row['rolname'];
 //     }
-    
+
 //     return $roles;
 // }
 
@@ -44,4 +44,4 @@ include_once "conexion.php";
 
 // // Código para usuarios autorizados
 // echo "Bienvenido, tienes los permisos necesarios.";
-// ?>
+// 
