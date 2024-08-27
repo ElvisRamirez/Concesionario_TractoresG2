@@ -33,7 +33,7 @@ services:
   grafana:
     image: grafana/grafana
     ports:
-      - "3500:3000"  # Cambiado aquí
+      - "3500:3000" 
     volumes:
       - grafana_data:/var/lib/grafana
     environment:
