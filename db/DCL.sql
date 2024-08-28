@@ -47,6 +47,68 @@ REVOKE INSERT, UPDATE, DELETE ON TABLE Clientes FROM Usuarios;
 REVOKE SELECT ON vista_pagos_con_detalles FROM Usuarios;
 
 
+-- Crear el rol 'empleados'
+CREATE ROLE empleados;
+
+-- Otorgar permisos sobre la tabla Clientes
+GRANT SELECT, INSERT, UPDATE, DELETE ON Clientes TO empleados;
+
+-- Otorgar permisos sobre la tabla Tractores
+GRANT SELECT, INSERT, UPDATE, DELETE ON Tractores TO empleados;
+
+-- Otorgar permisos sobre la tabla Ventas
+GRANT SELECT, INSERT, UPDATE, DELETE ON Ventas TO empleados;
+
+-- Otorgar permisos sobre la tabla DetallesVenta (asociada a Ventas)
+GRANT SELECT, INSERT, UPDATE, DELETE ON DetallesVenta TO empleados;
+-- Otorgar permisos sobre la tabla DetallesVenta (asociada a Ventas)
+GRANT SELECT, INSERT, UPDATE, DELETE ON tractores TO empleados;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ModelosTractores TO empleados;
+-- Otorgar permisos sobre la tabla Alquileres
+GRANT SELECT, INSERT, UPDATE, DELETE ON Alquileres TO empleados;
+
+-- Otorgar permisos sobre la tabla DetallesAlquiler (asociada a Alquileres)
+GRANT SELECT, INSERT, UPDATE, DELETE ON DetallesAlquiler TO empleados;
+
+-- Otorgar permisos sobre la tabla Facturas
+GRANT SELECT, INSERT, UPDATE, DELETE ON Facturas TO empleados;
+
+-- Otorgar permisos sobre la tabla DetallesFactura (asociada a Facturas)
+GRANT SELECT, INSERT, UPDATE, DELETE ON DetallesFactura TO empleados;
+
+-- Otorgar permisos sobre la tabla Pagos (relacionada con Facturas)
+GRANT SELECT, INSERT, UPDATE, DELETE ON Pagos TO empleados;
+-- Primero, asegúrate de que el rol 'empleados' exista
+CREATE ROLE empleados;
+
+-- Concede todos los permisos en el esquema público (o el esquema en el que estás trabajando)
+GRANT USAGE ON SCHEMA public TO empleados;
+
+-- Concede todos los permisos en las tablas existentes
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO empleados;
+
+-- Concede permisos para crear nuevas tablas y otros objetos en el esquema
+GRANT CREATE ON SCHEMA public TO empleados;
+
+-- Concede todos los permisos en las vistas existentes
+GRANT SELECT ON ALL VIEWS IN SCHEMA public TO empleados;
+-- Concede permisos en vistas específicas
+GRANT SELECT ON VistaTractoresDisponibles TO empleados;
+GRANT SELECT ON  VistaFacturasDetalles TO empleados;
+GRANT SELECT ON VistaDetallesAlquileres TO empleados;
+GRANT SELECT ON ultimos_tractores_disponibles TO empleados;
+GRANT SELECT ON vista_inventario TO empleados;
+GRANT SELECT ON vista_pagos_con_detalles TO empleados;
+-- Establece permisos predeterminados para futuras tablas
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO empleados;
+
+-- Establece permisos predeterminados para futuras vistas
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON TABLES TO empleados;
+
+
+-- Si en el futuro se crean nuevas tablas o vistas, se deben ajustar los permisos de manera similar:
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT, INSERT, UPDATE, DELETE ON TABLES TO empleados;
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT SELECT ON VIEWS TO empleados;
 
 -- Revocar permisos de lectura en las tablas
 REVOKE SELECT ON TABLE Clientes FROM Usuarios;
