@@ -2,7 +2,7 @@
 
 //=======
 include "../conexion.php";
-include "../permisos.php"; 
+
 //>>>>>>> b964678eef722a98cc3f7c5f82fbdc9559e0064f
 // Verificar si se ha enviado un ID válido
 if (!isset($_GET['id']) || empty($_GET['id'])) {
@@ -27,4 +27,3 @@ $query->execute([$clienteID]);
 // Redirigir a la página principal después de eliminar
 header("Location: ../Form_Clientes/clientes.php");
 exit;
-?>

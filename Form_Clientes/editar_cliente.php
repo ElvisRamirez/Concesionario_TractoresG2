@@ -4,7 +4,7 @@
 include "../conexion.php";
 
 
-include "../permisos.php"; 
+
 // Verificar si se ha enviado un ID válido
 if (!isset($_GET['id']) || empty($_GET['id'])) {
     die("ID de cliente no proporcionado.");
@@ -43,6 +43,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -52,93 +53,127 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <style>
     .permiso-denegado-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            z-index: 1000;
-        }
-        .notification {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1050;
-            display: none;
-        }
-        .notification.show {
-            display: block;
-        }
-   body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-        }
-        .container {
-            max-width: 600px;
-        }
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        z-index: 1000;
+    }
+
+    .notification {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1050;
+        display: none;
+    }
+
+    .notification.show {
+        display: block;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+    }
+
+    .container {
+        max-width: 600px;
+    }
+
     .sidenav {
-      height: 100%;
-      width: 200px;
-      position: fixed;
-      z-index: 1;
-      top: 0;
-      left: 0; /* Menú visible por defecto */
-      background-color: #f8f9fa;
-      padding-top: 20px;
+        height: 100%;
+        width: 200px;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        /* Menú visible por defecto */
+        background-color: #f8f9fa;
+        padding-top: 20px;
     }
+
     .sidenav a {
-      padding: 10px 15px;
-      text-decoration: none;
-      font-size: 18px;
-      color: #343a40;
-      display: block;
+        padding: 10px 15px;
+        text-decoration: none;
+        font-size: 18px;
+        color: #343a40;
+        display: block;
     }
+
     .sidenav a:hover {
-      background-color: #dee2e6; /* Cambia el color de fondo cuando se pasa el mouse sobre los enlaces */
+        background-color: #dee2e6;
+        /* Cambia el color de fondo cuando se pasa el mouse sobre los enlaces */
     }
+
     .content {
-      margin-left: 250px; /* Ajusta el margen izquierdo para dejar espacio para el menú */
+        margin-left: 250px;
+        /* Ajusta el margen izquierdo para dejar espacio para el menú */
     }
-     /* Estilo personalizado */
-  .row-with-transition {
-    overflow-x: hidden;
-  }
-  .row-with-transition:hover .row {
-    transform: translateX(-235px); /* Ajusta el desplazamiento según tus necesidades */
-  }
-  .row {
-    transition: transform 0.4s ease; /* Agrega una transición suave al desplazamiento */
-  }
-  </style>
+
+    /* Estilo personalizado */
+    .row-with-transition {
+        overflow-x: hidden;
+    }
+
+    .row-with-transition:hover .row {
+        transform: translateX(-235px);
+        /* Ajusta el desplazamiento según tus necesidades */
+    }
+
+    .row {
+        transition: transform 0.4s ease;
+        /* Agrega una transición suave al desplazamiento */
+    }
+</style>
 </head>
+
 <body>
 
-<div class="sidenav" id="mySidenav">
-<a  href="#"><i class="fas fa-user mr-2" >  </i><?php echo htmlspecialchars($username); ?></a>
+    <div class="sidenav" id="mySidenav">
+        <a href="#"><i class="fas fa-user mr-2"> </i><?php echo htmlspecialchars($_SESSION['username']); ?></a>
         <a href="../index.php"><i class="fas fa-home mr-2"></i> Inicio</a>
-        <a href="../Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
-        <a href="../Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
-        <a href="../Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
-        <a href="../tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
-        <a href="../Form_Ventas/ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
-        <a href="../alquiler.php"><i class="fas fa-calendar-alt mr-2"></i> Alquileres</a>
-        <a href="../Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
-        <a href="../pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
-        <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
+
+        <?php if ($_SESSION['role'] === 'Administrador' || $_SESSION['role'] === 'empleados') : ?>
+            <a href="../Form_Clientes/clientes.php"><i class="fas fa-user mr-2"></i> Clientes</a>
+        <?php endif; ?>
+
+        <?php if ($_SESSION['role'] === 'Administrador') : ?>
+            <a href="../Form_Empleado/empleados.php"><i class="fas fa-user-tie mr-2"></i> Empleados</a>
+            <a href="../Form_Proveedores/proveedores.php"><i class="fas fa-box mr-2"></i> Proveedores</a>
+        <?php endif; ?>
+
+        <?php if ($_SESSION['role'] === 'Administrador' || $_SESSION['role'] === 'empleados') : ?>
+            <a href="../tractor.php"><i class="fas fa-tractor mr-2"></i> Tractores</a>
+        <?php endif; ?>
+
+        <?php if ($_SESSION['role'] === 'Administrador' || $_SESSION['role'] === 'empleados') : ?>
+            <a href="../Form_Ventas/ventas.php"><i class="fas fa-shopping-cart mr-2"></i> Ventas</a>
+            <a href="../alquiler.php"><i class="fas fa-calendar-alt mr-2"></i> Alquileres</a>
+            <a href="../Facturas.php"><i class="fas fa-file-invoice-dollar mr-2"></i> Facturas</a>
+        <?php endif; ?>
+
+        <?php if ($_SESSION['role'] === 'Administrador') : ?>
+            <a href="../pagos.php"><i class="fas fa-credit-card mr-2"></i> Pagos</a>
+            <a href="../inventario.php"><i class="fas fa-warehouse mr-2"></i> Inventario</a>
+        <?php endif; ?>
+
         <a href="../logout.php"><i class="fas fa-sign-out-alt mr-2"></i> Cerrar sesión</a>
     </div>
 
-    
+
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -181,9 +216,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-<!-- Scripts de Bootstrap y Font Awesome -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Scripts de Bootstrap y Font Awesome -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>

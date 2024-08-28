@@ -10,11 +10,12 @@ if (session_status() == PHP_SESSION_NONE) {
 
 // Datos de conexión disponibles
 $credentials = [
-    'postgres' => ['host' => '192.168.11.192', 'dbname' => 'Concesionario_Tractores', 'user' => 'postgres', 'password' => '593'],
-    'usuario1' => ['host' => '192.168.11.192', 'dbname' => 'Concesionario_Tractores', 'user' => 'usuario1', 'password' => 'usuario'],
-    'admin1' => ['host' => '192.168.11.192', 'dbname' => 'Concesionario_Tractores', 'user' => 'admin1', 'password' => 'admin'],
-    'empleado1' => ['host' => '192.168.11.192', 'dbname' => 'Concesionario_Tractores', 'user' => 'empleado1', 'password' => 'empleado'],
+    'postgres' => ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'postgres', 'password' => '593', 'role' => 'Administrador'],
+    'usuario1' => ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'usuario1', 'password' => 'usuario', 'role' => 'Usuarios'],
+    'admin1' => ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'admin1', 'password' => 'admin', 'role' => 'Administrador'],
+    'empleado1' => ['host' => 'localhost', 'dbname' => 'Concesionario_Tractores', 'user' => 'empleado1', 'password' => 'empleado', 'role' => 'empleados'],
 ];
+
 
 try {
     // Recoger datos del formulario
