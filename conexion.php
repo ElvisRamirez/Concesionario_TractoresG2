@@ -17,7 +17,7 @@ $dbPass = $_SESSION['dbPass'];
 if (empty($dbHost) || empty($dbName) || empty($dbUser) || empty($dbPass)) {
     die("Datos de conexión incompletos.");
 }
-
+//este si vale :)
 try {
     // Establecer conexión PDO
     $db = new PDO("pgsql:host=$dbHost;dbname=$dbName", $dbUser, $dbPass);
