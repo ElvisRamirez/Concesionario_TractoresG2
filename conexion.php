@@ -13,6 +13,10 @@ $dbHost = $_SESSION['dbHost'];
 $dbName = $_SESSION['dbName'];
 $dbUser = $_SESSION['dbUser'];
 $dbPass = $_SESSION['dbPass'];
+// Verificar que los datos de conexión no están vacíos
+if (empty($dbHost) || empty($dbName) || empty($dbUser) || empty($dbPass)) {
+    die("Datos de conexión incompletos.");
+}
 
 try {
     // Establecer conexión PDO
